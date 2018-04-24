@@ -10,7 +10,7 @@ white = (255,255,255)
 red = (255,0,0)
 yellow = (0,255,0)
 blue = (0,0,255)
-carImg = pygame.image.load('C:\Users\daeda\source\repos\First game\Bild\Pixelart.png')
+carImg = pygame.image.load("Pixelart.png")
 x = (display_width * 0.45)
 y = (display_hight * 0.8)
 crashed = False
@@ -38,10 +38,10 @@ while not crashed:
         if event.type == pygame.QUIT:
             crashed = True
 
-gameDisplay.fill(white)
+pygame.gameDisplay.fill(white)
 car(x,y)
 
 pygame.display.update()
-clock.tick(60)
+clock.count(60)
 pygame.quit()
 quit()
