@@ -36,16 +36,16 @@ def choosePath():
 
 def checkPath(choosenPath):
     time.sleep(2)
-    print("test")
+    print("you run through the tunnel...")
     time.sleep(1)
-    print("text")
+    print("after a few seconds,")
 
     if choosenPath == str(correctPath):
         time.sleep(2)
-        print("weg 2 true")
+        print("you enter a little cave ,")
         time.sleep(1)
-        print("test2")
-            
+        print("there are again two tunnels,"))
+        Print("which one will you choose?")
     else:
         time.sleep(1)
         print("weg 2 false")    
