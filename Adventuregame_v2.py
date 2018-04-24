@@ -1,5 +1,6 @@
 import random
 import time
+import sys
 #Variabeln:
 correctPathZwei = random.randint(1,2)
 correctPath = random.randint(1,2)
@@ -37,18 +38,21 @@ def choosePath():
 def checkPath(choosenPath):
     time.sleep(2)
     print("you run through the tunnel...")
-    time.sleep(1)
-    print("after a few seconds,")
+
 
     if choosenPath == str(correctPath):
-        time.sleep(2)
+        time.sleep(1)
+        print("after a few seconds,")
+        time.sleep(1)
         print("you enter a little cave ,")
         time.sleep(1)
-        print("there are again two tunnels,"))
-        Print("which one will you choose?")
+        print("there are again two tunnels,")
+        print("which one will you choose?")
+        print()
     else:
         time.sleep(1)
-        print("weg 2 false")    
+        print("it seems like there is no end.....")
+        print()
 
 def choosePathZwei():
     pathZwei = ""
@@ -66,8 +70,8 @@ def checkPathZwei(choosePathZwei,choosenPath):
     time.sleep(2)
     print("a good sign...")
     print()
-    time.sleep(2)
-    print(choosePathZwei,str(correctPathZwei))
+    time.sleep(1)
+    #print(choosePathZwei,str(correctPathZwei))
     
     if choosePathZwei == str(correctPathZwei) and choosenPath == str(correctPath):
         time.sleep(1)
@@ -79,7 +83,8 @@ def checkPathZwei(choosePathZwei,choosenPath):
         time.sleep(2)
         print("~~~~~~~")
         print("THE END")
-        print("~~~~~~~")        
+        print("~~~~~~~")      
+        print()
         
     else:
         time.sleep(1)
@@ -98,16 +103,17 @@ def checkPathZwei(choosePathZwei,choosenPath):
         print("~~~~~~~")
         print("THE END")
         print("~~~~~~~")
+        print()
         
 while playAgain == "y":
         
     time.sleep(1)
     startMenue()
-    print(correctPath)
+    #print(correctPath)
     choice = choosePath()
     checkPath(choice) # choice is equal to "1" or "2"
     time.sleep(1)
-    print(correctPathZwei)
+    #print(correctPathZwei)
     choiceZwei = choosePathZwei()
     checkPathZwei(choiceZwei,choice)
     time.sleep(1)
@@ -118,3 +124,8 @@ while playAgain == "y":
         print("Thanks for playing!")
         time.sleep(0.5)
         print("Bye")
+        time.sleep(2)
+        print("press Enter to exit")
+        eingabe = input(str(""))
+        if eingabe == "":
+            sys.exit()
