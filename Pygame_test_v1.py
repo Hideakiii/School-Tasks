@@ -12,7 +12,8 @@ yellow = (0,255,0)
 blue = (0,0,255)
 # Ich würde hier nur einen lokalen Pfad nehmen. Also einfach die Bilddatei in das selbe Verzeichnis wie die Python-Datei
 carImg = pygame.image.load('snake.png')
-x = (display_width * 0.45)
+carImg = pygame.transform.scale(carImg, (75, 75)) """ gameDisplay.blit(pygame.transform.scale(carImg, (75, 75)), (350, 500))
+x = (display_width * 0.45)                       --> habe hier mit das Bild kleiner skaliert und es unten am Bildschirmrand positioniert"""
 y = (display_hight * 0.8)
 crashed = False
 
