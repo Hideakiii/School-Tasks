@@ -24,8 +24,6 @@ def startMenue():
     time.sleep(2)
     print("the other one will lead to your death!")
     print()
-
-
      
 def choosePath():
     path = ""
@@ -34,24 +32,25 @@ def choosePath():
         path = input("Which path will you choose? (1.right or 2.left)?: ")
     return str(path)
         
-
 def checkPath(choosenPath):
     time.sleep(2)
     print("you run through the tunnel...")
 
-
     if choosenPath == str(correctPath):
         time.sleep(1)
-        print("after a few seconds,")
+        print("after a few seconds")
         time.sleep(1)
         print("you enter a little cave ,")
         time.sleep(1)
         print("there are again two tunnels,")
-        print("which one will you choose?")
         print()
     else:
         time.sleep(1)
-        print("it seems like there is no end.....")
+        print("it seems like there is no end...")
+        time.sleep(1)
+        print("finaly you get to a crossing.")
+        time.sleep(0.5)
+        print("there are two tunnels...")
         print()
 
 def choosePathZwei():
@@ -105,8 +104,7 @@ def checkPathZwei(choosePathZwei,choosenPath):
         print("~~~~~~~")
         print()
         
-while playAgain == "y":
-        
+while playAgain == "y": 
     time.sleep(1)
     startMenue()
     #print(correctPath)
