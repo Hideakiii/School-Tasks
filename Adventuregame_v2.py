@@ -5,7 +5,6 @@ correctPathZwei = random.randint(1,2)
 correctPath = random.randint(1,2)
 playAgain = "y"
 
-
 def startMenue():
     time.sleep(1)
     print("~~~~~~~~~~")
@@ -25,14 +24,40 @@ def startMenue():
     print("the other one will lead to your death!")
     print()
 
+
+     
+def choosePath():
+    path = ""
+    while path != "1" and path != "2":
+        time.sleep(1)
+        path = input("Which path will you choose? (1.right or 2.left)?: ")
+    return str(path)
+        
+
+def checkPath(choosenPath):
+    time.sleep(2)
+    print("test")
+    time.sleep(1)
+    print("text")
+
+    if choosenPath == str(correctPath):
+        time.sleep(2)
+        print("weg 2 true")
+        time.sleep(1)
+        print("test2")
+            
+    else:
+        time.sleep(1)
+        print("weg 2 false")    
+
 def choosePathZwei():
     pathZwei = ""
     while pathZwei != "1" and pathZwei != "2": # input validation
         time.sleep(1)
         pathZwei = input("Which path will you choose? (1.right or 2.left): ")
-    return str(pathZwei)
+    return pathZwei
 
-def checkPathZwei(choosePathZwei):
+def checkPathZwei(choosePathZwei,choosenPath):
     time.sleep(2)
     print("you run through the tunnel")
     print("......")
@@ -42,8 +67,9 @@ def checkPathZwei(choosePathZwei):
     print("a good sign...")
     print()
     time.sleep(2)
-
-    if choosePathZwei == str(correctPathZwei) and choosePath == str(correctPath):
+    print(choosePathZwei,str(correctPathZwei))
+    
+    if choosePathZwei == str(correctPathZwei) and choosenPath == str(correctPath):
         time.sleep(1)
         print("you already can see a ray of light...")
         time.sleep(1.5)
@@ -72,32 +98,7 @@ def checkPathZwei(choosePathZwei):
         print("~~~~~~~")
         print("THE END")
         print("~~~~~~~")
-     
-def choosePath():
-    path = ""
-    while path != "1" and path != "2":
-        time.sleep(1)
-        path = input("Which path will you choose? (1.right or 2.left)?: ")
-    return str(path)
         
-
-def checkPath(choosePath):
-    time.sleep(2)
-    print("test")
-    time.sleep(1)
-    print("text")
-
-    if choosePath == str(correctPath):
-        time.sleep(2)
-        print("weg 2 true")
-        time.sleep(1)
-        print("test2")
-            
-    else:
-        time.sleep(1)
-        print("weg 2 false")    
-
-
 while playAgain == "y":
         
     time.sleep(1)
@@ -108,7 +109,7 @@ while playAgain == "y":
     time.sleep(1)
     print(correctPathZwei)
     choiceZwei = choosePathZwei()
-    checkPathZwei(choiceZwei)
+    checkPathZwei(choiceZwei,choice)
     time.sleep(1)
     playAgain = input("Do you want to play again [y/n]?: ")
 
