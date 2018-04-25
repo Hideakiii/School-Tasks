@@ -1,6 +1,7 @@
 import pygame
 import random
 import time
+import os
 #variabeln:
 
 display_width = 800
@@ -11,22 +12,21 @@ red = (255,0,0)
 yellow = (0,255,0)
 blue = (0,0,255)
 # Ich würde hier nur einen lokalen Pfad nehmen. Also einfach die Bilddatei in das selbe Verzeichnis wie die Python-Datei
-carImg = pygame.image.load('snake.png')
-carImg = pygame.transform.scale(carImg, (75, 75)) # gameDisplay.blit(pygame.transform.scale(carImg, (75, 75)), (350, 500))
-x = (display_width * 0.45)                      # --> habe hier mit das Bild kleiner skaliert und es unten am Bildschirmrand positioniert
+carImg = pygame.image.load('Pixelart.png')
+x = (display_width * 0.45)
 y = (display_hight * 0.8)
 crashed = False
 
 #definitionen:
 
 def car (x,y):
-    # Ich habe die Koordinaten mal auf 0,0 gesetzt, weil das Bild sonst halb aus dem Bildschirm ragt...
-    gameDisplay.blit(carImg, (0,0))
+    #hiermit sollte das Bild nun immer am unteren Bildschirmrand sein 
+    gameDisplay.blit(pygame.transform.scale(carImg, (75, 75)), (x, y))
 
 #Initialisierung:
 
 pygame.init()
-pygame.display.set_caption("RaceGame")
+pygame.display.set_caption("FirstGame")
 gameDisplay = pygame.display.set_mode((display_width,display_hight))
 
 # Punkt Komma Groß
