@@ -5,17 +5,13 @@ import os
 
 #Variabeln:
 display_width = 800
-display_hight = 600
-gameDisplay = pygame.display.set_mode((display_width,display_hight))
+display_height = 600
+gameDisplay = pygame.display.set_mode((display_width,display_height))
 carImg = pygame.image.load('Pixelart.png')
 img_width = 75
-img_hight = 75
+img_height = 75
 black = (0,0,0)
 #definitionen:
-
-def car (x,y):
-    #hiermit sollte das Bild nun immer am unteren Bildschirmrand sein 
-    gameDisplay.blit(pygame.transform.scale(carImg, (75, 75)), (x, y))
 
 def text_objects(text, font):
     textSurface = font.render(text, True, black)
@@ -24,7 +20,7 @@ def text_objects(text, font):
 def message_display(text):
     largeText = pygame.font.Font("freesansbold.ttf",115)
     TextSurf, TextRect = text_objects(text, largeText)
-    TextRect.center = ((display_width/2),(display_hight/2))
+    TextRect.center = ((display_width/2),(display_height/2))
     gameDisplay.blit(TextSurf, TextRect)
     pygame.display.update()
     time.sleep(2)
@@ -33,10 +29,16 @@ def message_display(text):
 def crash():
     message_display("You Crashed!")
 
+def car (x,y):
+    #hiermit sollte das Bild nun immer am unteren Bildschirmrand sein 
+    gameDisplay.blit(pygame.transform.scale(carImg, (75, 75)), (x, y))
+
+def things(thing_x, thing_y, thing_h, thing_w, color):
+    pygame.draw.rect(gameDisplay, color, [thing_x, thing_y, thing_w, thing_h])
 
 
 def game_loop():
-    #variabeln:
+    #variabeln_2:
     black = (0,0,0)
     white = (255,255,255)
     red = (255,0,0)
@@ -44,25 +46,29 @@ def game_loop():
     blue = (0,0,255)
     # Ich würde hier nur einen lokalen Pfad nehmen. Also einfach die Bilddatei in das selbe Verzeichnis wie die Python-Datei
     x = (display_width * 0.45)
-    y = (display_hight * 0.8)
+    y = (display_height * 0.8)
     x_change = 0
     y_change = 0
     gameExit = False
 
-    #Initialisierung:
+    thing_start_x = random.randrange(0, display_width)
+    thing_start_y = -600
+    thing_speed = 7
+    thing_width = 100
+    thing_height = 100
 
+
+
+    #Initialisierung:
     pygame.init()
     pygame.display.set_caption("FirstGame")
 
     # Punkt Komma Groß
     clock = pygame.time.Clock()
 
-
-
     while not gameExit:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                gameExit = True
                 pygame.quit()
                 quit()
 
@@ -86,9 +92,7 @@ def game_loop():
                 if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                     y_change = 0
 
-
-
-            # variabeln 2 :
+        # variabeln 2 :
         x += x_change
         y += y_change
             # Die folgenden Zeilen sollen alle durch den while-loop wiederholt werden...
@@ -96,12 +100,27 @@ def game_loop():
             # Allerdings nicht wie das if, da sie sonst für jedes event wiederholt würden.
         gameDisplay.fill(white)
         car(x,y)
+        #things(thin_x, thing_y, thing_h, thing_w, color)
+        things(thing_start_x, thing_start_y, thing_height, thing_width, black)
+        thing_start_y += thing_speed
+
 
         if x > display_width - img_width or x < 0:
             crash()
-        if y > display_hight - img_hight or y < 0:
+        if y > display_height - img_height or y < 0:
             crash()
-            #gameExit = True
+
+        if thing_start_y > display_height:
+            thing_start_y = 0 - thing_height
+            thing_start_x = random.randrange(0, display_width)
+
+        if y < thing_start_y + thing_height:
+            print("y crossover")
+            if x > thing_start_x and x < thing_start_x + thing_width or x + img_width > thing_start_x and x + img_width < thing_start_x + thing_width:
+                print("x crossover")
+                crash()
+
+
 
         pygame.display.update()
         clock.tick(60)
