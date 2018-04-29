@@ -4,14 +4,16 @@ import time
 import os
 
 #Variabeln:
-display_width = 800
-display_height = 600
+display_width = 1200
+display_height = 700
 gameDisplay = pygame.display.set_mode((display_width,display_height))
 carImg = pygame.image.load('Pixelart.png')
 img_width = 75
 img_height = 75
 black = (0,0,0)
+Score = 1
 #definitionen:
+
 
 def text_objects(text, font):
     textSurface = font.render(text, True, black)
@@ -26,6 +28,9 @@ def message_display(text):
     time.sleep(2)
     game_loop()
 
+#def score():
+ #   message_display_2("Score")
+
 def crash():
     message_display("You Crashed!")
 
@@ -35,6 +40,9 @@ def car (x,y):
 
 def things(thing_x, thing_y, thing_h, thing_w, color):
     pygame.draw.rect(gameDisplay, color, [thing_x, thing_y, thing_w, thing_h])
+
+def things_2(thing_2_x, thing_2_y, thing_2_h, thing_2_w, color):
+    pygame.draw.rect(gameDisplay, color, [thing_2_x, thing_2_y, thing_2_h, thing_2_w])
 
 
 def game_loop():
@@ -50,14 +58,18 @@ def game_loop():
     x_change = 0
     y_change = 0
     gameExit = False
-
+    #thing 1 :
     thing_start_x = random.randrange(0, display_width)
-    thing_start_y = -600
+    thing_start_y = -700
     thing_speed = 7
-    thing_width = 100
-    thing_height = 100
-
-
+    thing_width = 75
+    thing_height = 75
+    #thing 2:
+    thing_2_start_x = -1200
+    thing_2_start_y = random.randrange(0, display_height)
+    thing_2_speed = 7
+    thing_2_width = 75
+    thing_2_height = 75
 
     #Initialisierung:
     pygame.init()
@@ -74,9 +86,9 @@ def game_loop():
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
-                    x_change = -5
+                    x_change = -6
                 elif event.key == pygame.K_RIGHT:
-                    x_change = 5
+                    x_change = 6
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
@@ -84,9 +96,9 @@ def game_loop():
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
-                    y_change = -5
+                    y_change = -6
                 elif event.key == pygame.K_DOWN:
-                    y_change = 5
+                    y_change = 6
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
@@ -103,7 +115,8 @@ def game_loop():
         #things(thin_x, thing_y, thing_h, thing_w, color)
         things(thing_start_x, thing_start_y, thing_height, thing_width, black)
         thing_start_y += thing_speed
-
+        things_2(thing_2_start_x, thing_2_start_y, thing_2_height, thing_2_width, black)
+        thing_2_start_x += thing_2_speed
 
         if x > display_width - img_width or x < 0:
             crash()
@@ -113,18 +126,23 @@ def game_loop():
         if thing_start_y > display_height:
             thing_start_y = 0 - thing_height
             thing_start_x = random.randrange(0, display_width)
+        if thing_2_start_x > display_width:
+            thing_2_start_x = 0 - thing_2_width
+            thing_2_start_y = random.randrange(0, display_height)
 
-        if y < thing_start_y + thing_height:
-            print("y crossover")
+        if y <= thing_start_y + thing_height and y >= thing_start_y - thing_height:
             if x > thing_start_x and x < thing_start_x + thing_width or x + img_width > thing_start_x and x + img_width < thing_start_x + thing_width:
-                print("x crossover")
                 crash()
-
+        if x <= thing_2_start_x + thing_2_height and x >= thing_2_start_x - thing_2_height:
+            if y > thing_2_start_y and y < thing_2_start_y + thing_2_width or y + img_width > thing_2_start_y and y + img_width < thing_2_start_y + thing_2_width:
+                crash()
 
 
         pygame.display.update()
         clock.tick(60)
-
+        thing_speed += 0.001
+        thing_2_speed += 0.001
+        #score()
 # Das soll nur einmal am Ende ausgeführt werden, also ist es wieder ganz ausgerückt.
 game_loop()
 pygame.quit()
