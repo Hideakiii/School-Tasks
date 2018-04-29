@@ -28,9 +28,11 @@ def message_display(text):
     time.sleep(2)
     game_loop()
 
-#def score():
- #   message_display_2("Score")
-
+def Score(count):
+    font = pygame.font.SysFont(None, 25)
+    text = font.render("Score: "+ str(count), True ,black)
+    gameDisplay.blit(text, (0,0))
+    
 def crash():
     message_display("You Crashed!")
 
@@ -58,13 +60,17 @@ def game_loop():
     x_change = 0
     y_change = 0
     gameExit = False
+    score = 0
     #thing 1 :
+
     thing_start_x = random.randrange(0, display_width)
     thing_start_y = -700
     thing_speed = 7
     thing_width = 75
     thing_height = 75
+
     #thing 2:
+
     thing_2_start_x = -1200
     thing_2_start_y = random.randrange(0, display_height)
     thing_2_speed = 7
@@ -112,6 +118,8 @@ def game_loop():
             # Allerdings nicht wie das if, da sie sonst für jedes event wiederholt würden.
         gameDisplay.fill(white)
         car(x,y)
+        Score(score)
+
         #things(thin_x, thing_y, thing_h, thing_w, color)
         things(thing_start_x, thing_start_y, thing_height, thing_width, black)
         thing_start_y += thing_speed
@@ -126,9 +134,11 @@ def game_loop():
         if thing_start_y > display_height:
             thing_start_y = 0 - thing_height
             thing_start_x = random.randrange(0, display_width)
+            score += 1
         if thing_2_start_x > display_width:
             thing_2_start_x = 0 - thing_2_width
             thing_2_start_y = random.randrange(0, display_height)
+            score += 1
 
         if y <= thing_start_y + thing_height and y >= thing_start_y - thing_height:
             if x > thing_start_x and x < thing_start_x + thing_width or x + img_width > thing_start_x and x + img_width < thing_start_x + thing_width:
