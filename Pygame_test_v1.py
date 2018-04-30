@@ -21,6 +21,7 @@ yellow = (0,255,0)
 blue = (0,0,255)
 # Punkt Komma Groß
 clock = pygame.time.Clock()
+pause = False
 
 #definitionen:
 
@@ -78,6 +79,29 @@ def button(msg,x,y,w,h,ic,ac,action=None):
     textRect.center = ((x+(w/2)), (y+(h/2)))
     gameDisplay.blit(textSurf, textRect)
 
+def unpause():
+    global pause
+    pause = False
+
+def paused():
+    pygame.init()
+    while pause:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+        gameDisplay.fill(white)
+        largeText = pygame.font.Font("freesansbold.ttf",115)
+        TextSurf, TextRect = text_objects("Paused", largeText)
+        TextRect.center = ((display_width/2),(display_height/2))
+        gameDisplay.blit(TextSurf, TextRect)
+        #buttons:
+        button("Continue",250,550,150,50,green,bright_green,unpause)
+        button("Quit",750,550,150,50,red,bright_red,quitgame)
+
+        pygame.display.update()
+        clock.tick(15)
+
 def game_intro():
     pygame.init()
     intro = True
@@ -100,6 +124,7 @@ def game_intro():
 
 
 def game_loop():
+    global pause
     #variabeln_2:
     black = (0,0,0)
     white = (255,255,255)
@@ -162,6 +187,11 @@ def game_loop():
                 if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                     y_change = 0
 
+                if event.key == pygame.K_p:
+                    pause = True
+                    paused()
+
+                
         # variabeln 2 :
         x += x_change
         y += y_change
