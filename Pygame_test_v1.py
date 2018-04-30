@@ -56,6 +56,10 @@ def things(thing_x, thing_y, thing_h, thing_w, color):
 def things_2(thing_2_x, thing_2_y, thing_2_h, thing_2_w, color):
     pygame.draw.rect(gameDisplay, color, [thing_2_x, thing_2_y, thing_2_h, thing_2_w])
 
+def quitgame():
+    pygame.quit()
+    quit()
+
 def button(msg,x,y,w,h,ic,ac,action=None):
     mouse = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
@@ -64,11 +68,8 @@ def button(msg,x,y,w,h,ic,ac,action=None):
                                   #ac = active color
         pygame.draw.rect(gameDisplay, ac, (x,y,w,h))
         if click[0] == 1 and action != None:
-            if action == "play":
-                game_loop()
-            elif action == "quit":
-                pygame.quit()
-                quit()
+            action()
+
     else:
         pygame.draw.rect(gameDisplay, ic, (x,y,w,h))
     # button 1 text:
@@ -87,12 +88,12 @@ def game_intro():
                 quit()
         gameDisplay.fill(white)
         largeText = pygame.font.Font("freesansbold.ttf",115)
-        TextSurf, TextRect = text_objects("A bit Racey", largeText)
+        TextSurf, TextRect = text_objects("Avalonion", largeText)
         TextRect.center = ((display_width/2),(display_height/2))
         gameDisplay.blit(TextSurf, TextRect)
         #buttons:
-        button("Start!",250,550,150,50,green,bright_green,"play")
-        button("Quit!",750,550,150,50,red,bright_red,"quit")
+        button("Start!",250,550,150,50,green,bright_green,game_loop)
+        button("Quit!",750,550,150,50,red,bright_red,quitgame)
 
         pygame.display.update()
         clock.tick(15)
