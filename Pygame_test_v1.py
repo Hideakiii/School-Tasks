@@ -3,6 +3,7 @@ import random
 import time
 import os
 
+pygame.init()
 #Variabeln:
 display_width = 1200
 display_height = 700
@@ -22,6 +23,7 @@ blue = (0,0,255)
 # Punkt Komma Groß
 clock = pygame.time.Clock()
 pause = False
+#crash = True
 
 #definitionen:
 
@@ -45,7 +47,22 @@ def Score(count):
     gameDisplay.blit(text, (0,0))
     
 def crash():
-    message_display("You Crashed!")
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+        largeText = pygame.font.Font("freesansbold.ttf",115)
+        TextSurf, TextRect = text_objects("You Crashed!", largeText)
+        TextRect.center = ((display_width/2),(display_height/2))
+        gameDisplay.blit(TextSurf, TextRect)
+        #buttons:
+        button("Play Again",250,550,150,50,green,bright_green,game_loop)
+        button("Quit",750,550,150,50,red,bright_red,quitgame)
+
+        pygame.display.update()
+        clock.tick(15)
 
 def car (x,y):
     #hiermit sollte das Bild nun immer am unteren Bildschirmrand sein 
@@ -84,13 +101,12 @@ def unpause():
     pause = False
 
 def paused():
-    pygame.init()
     while pause:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-        gameDisplay.fill(white)
+        #gameDisplay.fill(white)
         largeText = pygame.font.Font("freesansbold.ttf",115)
         TextSurf, TextRect = text_objects("Paused", largeText)
         TextRect.center = ((display_width/2),(display_height/2))
