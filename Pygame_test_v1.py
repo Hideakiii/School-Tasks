@@ -56,6 +56,27 @@ def things(thing_x, thing_y, thing_h, thing_w, color):
 def things_2(thing_2_x, thing_2_y, thing_2_h, thing_2_w, color):
     pygame.draw.rect(gameDisplay, color, [thing_2_x, thing_2_y, thing_2_h, thing_2_w])
 
+def button(msg,x,y,w,h,ic,ac,action=None):
+    mouse = pygame.mouse.get_pos()
+    click = pygame.mouse.get_pressed()
+    #button 1:
+    if x + w > mouse[0] > x and y + h > mouse[1] > y:
+                                  #ac = active color
+        pygame.draw.rect(gameDisplay, ac, (x,y,w,h))
+        if click[0] == 1 and action != None:
+            if action == "play":
+                game_loop()
+            elif action == "quit":
+                pygame.quit()
+                quit()
+    else:
+        pygame.draw.rect(gameDisplay, ic, (x,y,w,h))
+    # button 1 text:
+    smallText = pygame.font.Font("freesansbold.ttf", 20)
+    textSurf, textRect = text_objects(msg, smallText)
+    textRect.center = ((x+(w/2)), (y+(h/2)))
+    gameDisplay.blit(textSurf, textRect)
+
 def game_intro():
     pygame.init()
     intro = True
@@ -70,20 +91,8 @@ def game_intro():
         TextRect.center = ((display_width/2),(display_height/2))
         gameDisplay.blit(TextSurf, TextRect)
         #buttons:
-        mouse = pygame.mouse.get_pos()
-        #print(mouse)
-        if 250 + 150 > mouse[0] > 250 and 550 + 50 > mouse[1] > 550:
-            pygame.draw.rect(gameDisplay, bright_green, (250,550,150,50))
-        else:
-            pygame.draw.rect(gameDisplay, green, (250,550,150,50))
-        if 750 + 150 > mouse[0] > 750 and 550 + 50 > mouse[1] > 550:
-            pygame.draw.rect(gameDisplay, bright_red, (750,550,150,50))
-        else:
-            pygame.draw.rect(gameDisplay, red, (750,550,150,50))
-
-
-
-
+        button("Start!",250,550,150,50,green,bright_green,"play")
+        button("Quit!",750,550,150,50,red,bright_red,"quit")
 
         pygame.display.update()
         clock.tick(15)
@@ -188,7 +197,6 @@ def game_loop():
         if x <= thing_2_start_x + thing_2_height and x >= thing_2_start_x - thing_2_height:
             if y > thing_2_start_y and y < thing_2_start_y + thing_2_width or y + img_width > thing_2_start_y and y + img_width < thing_2_start_y + thing_2_width:
                 crash()
-
 
         pygame.display.update()
         clock.tick(60)
