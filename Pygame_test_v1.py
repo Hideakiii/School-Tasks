@@ -10,8 +10,18 @@ gameDisplay = pygame.display.set_mode((display_width,display_height))
 carImg = pygame.image.load('Pixelart.png')
 img_width = 75
 img_height = 75
-black = (0,0,0)
 Score = 1
+black = (0,0,0)
+white = (255,255,255)
+red = (200,0,0)
+bright_red = (255,0,0)
+green = (0,200,0)
+bright_green = (0,255,0)
+yellow = (0,255,0)
+blue = (0,0,255)
+# Punkt Komma Groß
+clock = pygame.time.Clock()
+
 #definitionen:
 
 
@@ -46,6 +56,38 @@ def things(thing_x, thing_y, thing_h, thing_w, color):
 def things_2(thing_2_x, thing_2_y, thing_2_h, thing_2_w, color):
     pygame.draw.rect(gameDisplay, color, [thing_2_x, thing_2_y, thing_2_h, thing_2_w])
 
+def game_intro():
+    pygame.init()
+    intro = True
+    while intro:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+        gameDisplay.fill(white)
+        largeText = pygame.font.Font("freesansbold.ttf",115)
+        TextSurf, TextRect = text_objects("A bit Racey", largeText)
+        TextRect.center = ((display_width/2),(display_height/2))
+        gameDisplay.blit(TextSurf, TextRect)
+        #buttons:
+        mouse = pygame.mouse.get_pos()
+        #print(mouse)
+        if 250 + 150 > mouse[0] > 250 and 550 + 50 > mouse[1] > 550:
+            pygame.draw.rect(gameDisplay, bright_green, (250,550,150,50))
+        else:
+            pygame.draw.rect(gameDisplay, green, (250,550,150,50))
+        if 750 + 150 > mouse[0] > 750 and 550 + 50 > mouse[1] > 550:
+            pygame.draw.rect(gameDisplay, bright_red, (750,550,150,50))
+        else:
+            pygame.draw.rect(gameDisplay, red, (750,550,150,50))
+
+
+
+
+
+        pygame.display.update()
+        clock.tick(15)
+
 
 def game_loop():
     #variabeln_2:
@@ -65,7 +107,7 @@ def game_loop():
 
     thing_start_x = random.randrange(0, display_width)
     thing_start_y = -700
-    thing_speed = 7
+    thing_speed = 5
     thing_width = 75
     thing_height = 75
 
@@ -73,7 +115,7 @@ def game_loop():
 
     thing_2_start_x = -1200
     thing_2_start_y = random.randrange(0, display_height)
-    thing_2_speed = 7
+    thing_2_speed = 5
     thing_2_width = 75
     thing_2_height = 75
 
@@ -154,6 +196,8 @@ def game_loop():
         thing_2_speed += 0.001
         #score()
 # Das soll nur einmal am Ende ausgeführt werden, also ist es wieder ganz ausgerückt.
+
+game_intro()
 game_loop()
 pygame.quit()
 quit()
