@@ -8,9 +8,10 @@ pygame.init()
 display_width = 1200
 display_height = 700
 gameDisplay = pygame.display.set_mode((display_width,display_height))
-carImg = pygame.image.load('Pixelart.png')
+P1_Img = pygame.image.load('Pixelart.png')
 img_width = 75
 img_height = 75
+pygame.display.set_icon(P1_Img)
 Score = 1
 black = (0,0,0)
 white = (255,255,255)
@@ -66,7 +67,7 @@ def crash():
 
 def car (x,y):
     #hiermit sollte das Bild nun immer am unteren Bildschirmrand sein 
-    gameDisplay.blit(pygame.transform.scale(carImg, (75, 75)), (x, y))
+    gameDisplay.blit(pygame.transform.scale(P1_Img, (75, 75)), (x, y))
 
 def things(thing_x, thing_y, thing_h, thing_w, color):
     pygame.draw.rect(gameDisplay, color, [thing_x, thing_y, thing_w, thing_h])
