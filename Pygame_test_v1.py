@@ -28,7 +28,6 @@ pause = False
 
 #definitionen:
 
-
 def text_objects(text, font):
     textSurface = font.render(text, True, black)
     return textSurface, textSurface.get_rect()
@@ -77,6 +76,9 @@ def things_3(thing_3_x, thing_3_y, thing_3_h, thing_3_w, color):
 
 def things_2(thing_2_x, thing_2_y, thing_2_h, thing_2_w, color):
     pygame.draw.rect(gameDisplay, color, [thing_2_x, thing_2_y, thing_2_h, thing_2_w])
+
+def things_4(thing_4_x, thing_4_y, thing_4_h, thing_4_w, color):
+    pygame.draw.rect(gameDisplay, color, [thing_4_x, thing_4_y, thing_4_h, thing_4_w])
 
 def quitgame():
     pygame.quit()
@@ -153,6 +155,7 @@ def game_loop():
     blue = (0,0,255)
     dark_brown = (100,75,75)
     grey = (65,65,65)
+    light_grey = (130,130,130)
     # Ich würde hier nur einen lokalen Pfad nehmen. Also einfach die Bilddatei in das selbe Verzeichnis wie die Python-Datei
     x = (display_width * 0.45)
     y = (display_height * 0.8)
@@ -183,6 +186,14 @@ def game_loop():
     thing_3_speed = 5
     thing_3_width = 50
     thing_3_height = 50
+
+    #thing 4:
+
+    thing_4_start_x = 1300
+    thing_4_start_y = random.randrange(0, display_height)
+    thing_4_speed = 3
+    thing_4_width = 100
+    thing_4_height = 100
 
 
     #Initialisierung:
@@ -236,10 +247,12 @@ def game_loop():
         #things(thin_x, thing_y, thing_h, thing_w, color)
         things(thing_start_x, thing_start_y, thing_height, thing_width, black)
         thing_start_y += thing_speed
-        things_2(thing_2_start_x, thing_2_start_y, thing_2_height, thing_2_width, grey)
+        things_2(thing_2_start_x, thing_2_start_y, thing_2_height, thing_2_width, light_grey)
         thing_2_start_x += thing_2_speed
         things_3(thing_3_start_x, thing_3_start_y, thing_3_height, thing_3_width, dark_brown)
         thing_3_start_y += thing_3_speed
+        things_4(thing_4_start_x, thing_4_start_y, thing_4_height, thing_4_width, grey)
+        thing_4_start_x -= thing_4_speed
 
         if x > display_width - img_width or x < 0:
             crash()
@@ -261,6 +274,11 @@ def game_loop():
             thing_3_start_x = random.randrange(0, display_height)
             score += 1
 
+        if thing_4_start_x < 0 - thing_4_width:
+            thing_4_start_x = display_width + thing_4_width
+            thing_4_start_y = random.randrange(0, display_height)
+            score += 1
+
         if y <= thing_start_y + thing_height and y >= thing_start_y - thing_height:
             if x > thing_start_x and x < thing_start_x + thing_width or x + img_width > thing_start_x and x + img_width < thing_start_x + thing_width:
                 crash()
@@ -270,12 +288,16 @@ def game_loop():
         if x <= thing_3_start_x + thing_3_height and x >= thing_3_start_x - thing_3_height:
             if y > thing_3_start_y and y < thing_3_start_y + thing_3_width or y + img_width > thing_3_start_y and y + img_width < thing_3_start_y + thing_3_width:
                 crash()
+        if x <= thing_4_start_x + thing_4_height and x >= thing_4_start_x - thing_4_height:
+            if y > thing_4_start_y and y < thing_4_start_y + thing_4_width or y + img_width > thing_4_start_y and y + img_width < thing_4_start_y + thing_4_width:
+                crash()
 
         pygame.display.update()
         clock.tick(60)
         thing_speed += 0.001
         thing_2_speed += 0.001
         thing_3_speed += 0.002
+        thing_4_speed += 0.001
         #score()
 # Das soll nur einmal am Ende ausgeführt werden, also ist es wieder ganz ausgerückt.
 
