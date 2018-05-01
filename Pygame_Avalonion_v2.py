@@ -160,12 +160,12 @@ def game_loop():
     light_grey = (130,130,130)
     # Ich würde hier nur einen lokalen Pfad nehmen. Also einfach die Bilddatei in das selbe Verzeichnis wie die Python-Datei
     #player 1:
-    P1_x = (display_width * 0.45)
+    P1_x = (display_width * 0.50)
     P1_y = (display_height * 0.8)
     P1_x_change = 0
     P1_y_change = 0
     #player 2:
-    P2_x = (display_width * 0.45)
+    P2_x = (display_width * 0.40)
     P2_y = (display_height * 0.8)
     P2_x_change = 0
     P2_y_change = 0
@@ -352,7 +352,6 @@ def game_loop():
         thing_4_speed += 0.001
         #score()
 # Das soll nur einmal am Ende ausgeführt werden, also ist es wieder ganz ausgerückt.
-
 game_intro()
 game_loop()
 pygame.quit()
