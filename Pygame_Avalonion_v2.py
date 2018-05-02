@@ -9,7 +9,7 @@ display_width = 1200
 display_height = 700
 gameDisplay = pygame.display.set_mode((display_width,display_height))
 P1_Img = pygame.image.load('Pixelart_P1.png')
-P2_Img = pygame.image.load('Pixelart_P2.jpeg')
+P2_Img = pygame.image.load('Pixelart_P2.png')
 img_width = 75
 img_height = 75
 pygame.display.set_icon(P1_Img)
@@ -72,15 +72,22 @@ def crash():
         pygame.display.update()
         clock.tick(15)
 
-def player_1(P1_x,P1_y,P2_x,P2_y):
+def player_1(P1_x,P1_y):
     #hiermit sollte das Bild nun immer am unteren Bildschirmrand sein 
     gameDisplay.blit(pygame.transform.scale(P1_Img, (75, 75)), (P1_x, P1_y))
+
+def player_2(P2_x,P2_y):
     global player_P2
     if player_P2 == True:
         gameDisplay.blit(pygame.transform.scale(P2_Img, (75, 75)), (P2_x, P2_y))
     
+def player_P2_true():
+    global player_P2
+    player_P2 = True
 
-
+def player_P2_false():
+    global player_P2
+    player_P2 = False
 
     
 def things(thing_x, thing_y, thing_h, thing_w, color):
@@ -123,7 +130,7 @@ def unpause():
 
 def paused():
     while pause:
-        Global player_P2
+        global player_P2
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -136,8 +143,8 @@ def paused():
         #buttons:
         button("Continue",250,550,150,50,green,bright_green,unpause)
         button("Quit",750,550,150,50,red,bright_red,quitgame)
-        button("Player Two Aktive",450,400,150,50,dark_brown,light_brown,player_P2 = True)
-        button("Player Two Deactive"),550,500,150,50,dark_brown,light_brown,player_P2 = False)
+        button("Player Two Aktive",450,400,150,50,dark_brown,light_brown,player_P2_true)
+        button("Player Two Deactive",550,500,150,50,dark_brown,light_brown,player_P2_false)
 
         pygame.display.update()
         clock.tick(15)
@@ -146,6 +153,7 @@ def game_intro():
     pygame.init()
     intro = True
     while intro:
+        global player_P2
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -158,7 +166,8 @@ def game_intro():
         #buttons:
         button("Start!",250,550,150,50,green,bright_green,game_loop)
         button("Quit!",750,550,150,50,red,bright_red,quitgame)
-        button("Player Two",500,450,150,50,dark_brown,light_brown,player_2)
+        button("Player Two Aktive",450,400,150,50,dark_brown,light_brown,player_P2_true)
+        button("Player Two Deactive",550,500,150,50,dark_brown,light_brown,player_P2_false)
         pygame.display.update()
         clock.tick(15)
 
@@ -293,9 +302,12 @@ def game_loop():
             # Sie müssen also die selbe Einrückung haben wie das for.
             # Allerdings nicht wie das if, da sie sonst für jedes event wiederholt würden.
         gameDisplay.fill(white)
-        player_1(P1_x,P1_y,P2_x,P2_y)
+
+        if player_P1 == True:
+            player_1(P1_x,P1_y)
         if player_P2 == True:
-            player_2()
+            player_2(P2_x,P2_y)
+
         Score(score)
         #things(thin_x, thing_y, thing_h, thing_w, color)
         things(thing_start_x, thing_start_y, thing_height, thing_width, black)
@@ -307,10 +319,11 @@ def game_loop():
         things_4(thing_4_start_x, thing_4_start_y, thing_4_height, thing_4_width, grey)
         thing_4_start_x -= thing_4_speed
         #player_1 1:
-        if P1_x > display_width - img_width or P1_x < 0:
-            crash()
-        if P1_y > display_height - img_height or P1_y < 0:
-            crash()
+        if player_P1 == True:
+            if P1_x > display_width - img_width or P1_x < 0:
+                crash()
+            if P1_y > display_height - img_height or P1_y < 0:
+                crash()
         #Player 2:
         if player_P2 == True:
             if P2_x > display_width - img_width or P2_x < 0:
@@ -338,18 +351,19 @@ def game_loop():
             thing_4_start_y = random.randrange(0, display_height)
             score += 1
         #Player 1 Kollisionen:
-        if P1_y <= thing_start_y + thing_height and P1_y >= thing_start_y - thing_height:
-            if P1_x > thing_start_x and P1_x < thing_start_x + thing_width or P1_x + img_width > thing_start_x and P1_x + img_width < thing_start_x + thing_width:
-                crash()
-        if P1_x <= thing_2_start_x + thing_2_height and P1_x >= thing_2_start_x - thing_2_height:
-            if P1_y > thing_2_start_y and P1_y < thing_2_start_y + thing_2_width or P1_y + img_width > thing_2_start_y and P1_y + img_width < thing_2_start_y + thing_2_width:
-                crash()
-        if P1_x <= thing_3_start_x + thing_3_height and P1_x >= thing_3_start_x - thing_3_height:
-            if P1_y > thing_3_start_y and P1_y < thing_3_start_y + thing_3_width or P1_y + img_width > thing_3_start_y and P1_y + img_width < thing_3_start_y + thing_3_width:
-                crash()
-        if P1_x <= thing_4_start_x + thing_4_height and P1_x >= thing_4_start_x - thing_4_height:
-            if P1_y > thing_4_start_y and P1_y < thing_4_start_y + thing_4_width or P1_y + img_width > thing_4_start_y and P1_y + img_width < thing_4_start_y + thing_4_width:
-                crash()
+        if player_P1 == True:
+            if P1_y <= thing_start_y + thing_height and P1_y >= thing_start_y - thing_height:
+                if P1_x > thing_start_x and P1_x < thing_start_x + thing_width or P1_x + img_width > thing_start_x and P1_x + img_width < thing_start_x + thing_width:
+                    crash()
+            if P1_x <= thing_2_start_x + thing_2_height and P1_x >= thing_2_start_x - thing_2_height:
+                if P1_y > thing_2_start_y and P1_y < thing_2_start_y + thing_2_width or P1_y + img_width > thing_2_start_y and P1_y + img_width < thing_2_start_y + thing_2_width:
+                    crash()
+            if P1_x <= thing_3_start_x + thing_3_height and P1_x >= thing_3_start_x - thing_3_height:
+                if P1_y > thing_3_start_y and P1_y < thing_3_start_y + thing_3_width or P1_y + img_width > thing_3_start_y and P1_y + img_width < thing_3_start_y + thing_3_width:
+                    crash()
+            if P1_x <= thing_4_start_x + thing_4_height and P1_x >= thing_4_start_x - thing_4_height:
+                if P1_y > thing_4_start_y and P1_y < thing_4_start_y + thing_4_width or P1_y + img_width > thing_4_start_y and P1_y + img_width < thing_4_start_y + thing_4_width:
+                    crash()
         #Player 2 Kollisionen:
         if player_P2 == True:        
             if P2_y <= thing_start_y + thing_height and P2_y >= thing_start_y - thing_height:
