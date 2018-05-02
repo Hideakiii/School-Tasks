@@ -79,9 +79,9 @@ def player_1(P1_x,P1_y,P2_x,P2_y):
     if player_P2 == True:
         gameDisplay.blit(pygame.transform.scale(P2_Img, (75, 75)), (P2_x, P2_y))
     
-def player_2():
-    global player_P2
-    player_P2 = not player_P2
+
+
+
     
 def things(thing_x, thing_y, thing_h, thing_w, color):
     pygame.draw.rect(gameDisplay, color, [thing_x, thing_y, thing_w, thing_h])
@@ -123,6 +123,7 @@ def unpause():
 
 def paused():
     while pause:
+        Global player_P2
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -135,7 +136,8 @@ def paused():
         #buttons:
         button("Continue",250,550,150,50,green,bright_green,unpause)
         button("Quit",750,550,150,50,red,bright_red,quitgame)
-        button("Player Two",500,450,150,50,dark_brown,light_brown,player_2)
+        button("Player Two Aktive",450,400,150,50,dark_brown,light_brown,player_P2 = True)
+        button("Player Two Deactive"),550,500,150,50,dark_brown,light_brown,player_P2 = False)
 
         pygame.display.update()
         clock.tick(15)
