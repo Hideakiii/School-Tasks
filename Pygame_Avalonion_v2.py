@@ -143,8 +143,8 @@ def paused():
         #buttons:
         button("Continue",250,550,150,50,green,bright_green,unpause)
         button("Quit",750,550,150,50,red,bright_red,quitgame)
-        button("Player Two Aktive",450,400,150,50,dark_brown,light_brown,player_P2_true)
-        button("Player Two Deactive",550,500,150,50,dark_brown,light_brown,player_P2_false)
+        button("Player 2 Aktive",375,450,175,50,dark_brown,light_brown,player_P2_true)
+        button("Player 2 Deactive",600,450,175,50,dark_brown,light_brown,player_P2_false)
 
         pygame.display.update()
         clock.tick(15)
@@ -166,8 +166,8 @@ def game_intro():
         #buttons:
         button("Start!",250,550,150,50,green,bright_green,game_loop)
         button("Quit!",750,550,150,50,red,bright_red,quitgame)
-        button("Player Two Aktive",450,400,150,50,dark_brown,light_brown,player_P2_true)
-        button("Player Two Deactive",550,500,150,50,dark_brown,light_brown,player_P2_false)
+        button("Player 2 Aktive",375,450,175,50,dark_brown,light_brown,player_P2_true)
+        button("Player 2 Deactive",600,450,175,50,dark_brown,light_brown,player_P2_false)
         pygame.display.update()
         clock.tick(15)
 
