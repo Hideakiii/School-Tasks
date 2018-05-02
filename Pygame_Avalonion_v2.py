@@ -9,7 +9,7 @@ display_width = 1200
 display_height = 700
 gameDisplay = pygame.display.set_mode((display_width,display_height))
 P1_Img = pygame.image.load('Pixelart_P1.png')
-P2_Img = pygame.image.load('Pixelart_P2.png')
+P2_Img = pygame.image.load('Pixelart_P2.jpeg')
 img_width = 75
 img_height = 75
 pygame.display.set_icon(P1_Img)
@@ -22,9 +22,16 @@ green = (0,200,0)
 bright_green = (0,255,0)
 yellow = (0,255,0)
 blue = (0,0,255)
+grey = (65,65,65)
+light_grey = (80,80,80)
+dark_brown = (90,75,80)
+light_brown = (110,95,100)
 # Punkt Komma Groß
 clock = pygame.time.Clock()
 pause = False
+player_P1 = True
+player_P2 = False
+
 #crash = True
 
 #definitionen:
@@ -65,11 +72,17 @@ def crash():
         pygame.display.update()
         clock.tick(15)
 
-def player (P1_x,P1_y,P2_x,P2_y):
+def player_1(P1_x,P1_y,P2_x,P2_y):
     #hiermit sollte das Bild nun immer am unteren Bildschirmrand sein 
     gameDisplay.blit(pygame.transform.scale(P1_Img, (75, 75)), (P1_x, P1_y))
-    gameDisplay.blit(pygame.transform.scale(P2_Img, (75, 75)), (P2_x, P2_y))
-
+    global player_P2
+    if player_P2 == True:
+        gameDisplay.blit(pygame.transform.scale(P2_Img, (75, 75)), (P2_x, P2_y))
+    
+def player_2():
+    global player_P2
+    player_P2 = not player_P2
+    
 def things(thing_x, thing_y, thing_h, thing_w, color):
     pygame.draw.rect(gameDisplay, color, [thing_x, thing_y, thing_w, thing_h])
 
@@ -86,22 +99,22 @@ def quitgame():
     pygame.quit()
     quit()
 
-def button(msg,P1_x,P1_y,w,h,ic,ac,action=None):
+def button(msg,x,y,w,h,ic,ac,action=None):
     mouse = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
     #button 1:
-    if P1_x + w > mouse[0] > P1_x and P1_y + h > mouse[1] > P1_y:
+    if x + w > mouse[0] > x and y + h > mouse[1] > y:
                                   #ac = active color
-        pygame.draw.rect(gameDisplay, ac, (P1_x,P1_y,w,h))
+        pygame.draw.rect(gameDisplay, ac, (x,y,w,h))
         if click[0] == 1 and action != None:
             action()
 
     else:
-        pygame.draw.rect(gameDisplay, ic, (P1_x,P1_y,w,h))
+        pygame.draw.rect(gameDisplay,ic,(x,y,w,h))
     # button 1 text:
     smallText = pygame.font.Font("freesansbold.ttf", 20)
     textSurf, textRect = text_objects(msg, smallText)
-    textRect.center = ((P1_x+(w/2)), (P1_y+(h/2)))
+    textRect.center = ((x+(w/2)), (y+(h/2)))
     gameDisplay.blit(textSurf, textRect)
 
 def unpause():
@@ -122,6 +135,7 @@ def paused():
         #buttons:
         button("Continue",250,550,150,50,green,bright_green,unpause)
         button("Quit",750,550,150,50,red,bright_red,quitgame)
+        button("Player Two",500,450,150,50,dark_brown,light_brown,player_2)
 
         pygame.display.update()
         clock.tick(15)
@@ -142,13 +156,14 @@ def game_intro():
         #buttons:
         button("Start!",250,550,150,50,green,bright_green,game_loop)
         button("Quit!",750,550,150,50,red,bright_red,quitgame)
-
+        button("Player Two",500,450,150,50,dark_brown,light_brown,player_2)
         pygame.display.update()
         clock.tick(15)
 
 
 def game_loop():
     global pause
+    global player_P2
     #variabeln_2:
     black = (0,0,0)
     white = (255,255,255)
@@ -159,7 +174,7 @@ def game_loop():
     grey = (65,65,65)
     light_grey = (130,130,130)
     # Ich würde hier nur einen lokalen Pfad nehmen. Also einfach die Bilddatei in das selbe Verzeichnis wie die Python-Datei
-    #player 1:
+    #player_1 1:
     P1_x = (display_width * 0.50)
     P1_y = (display_height * 0.8)
     P1_x_change = 0
@@ -192,8 +207,8 @@ def game_loop():
     thing_3_start_x = random.randrange(0, display_width)
     thing_3_start_y = -700
     thing_3_speed = 5
-    thing_3_width = 50
-    thing_3_height = 50
+    thing_3_width = 45
+    thing_3_height = 45
 
     #thing 4:
 
@@ -216,7 +231,7 @@ def game_loop():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-            #Player 1 controls:
+            #player_1 1 controls:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     P1_x_change = -6.5
@@ -241,29 +256,30 @@ def game_loop():
                     pause = True
                     paused()
             #Player 2 controls:
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_a:
-                    P2_x_change = -6.5
-                elif event.key == pygame.K_d:
-                    P2_x_change = 6.5
+            if player_P2 == True:
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_a:
+                        P2_x_change = -6.5
+                    elif event.key == pygame.K_d:
+                        P2_x_change = 6.5
 
-            if event.type == pygame.KEYUP:
-                if event.key == pygame.K_a or event.key == pygame.K_d:
-                    P2_x_change = 0
+                if event.type == pygame.KEYUP:
+                    if event.key == pygame.K_a or event.key == pygame.K_d:
+                        P2_x_change = 0
 
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_w:
-                    P2_y_change = -6.5
-                elif event.key == pygame.K_s:
-                    P2_y_change = 6.5
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_w:
+                        P2_y_change = -6.5
+                    elif event.key == pygame.K_s:
+                        P2_y_change = 6.5
 
-            if event.type == pygame.KEYUP:
-                if event.key == pygame.K_w or event.key == pygame.K_s:
-                    P2_y_change = 0
+                if event.type == pygame.KEYUP:
+                    if event.key == pygame.K_w or event.key == pygame.K_s:
+                        P2_y_change = 0
 
-                if event.key == pygame.K_p:
-                    pause = True
-                    paused()
+                    if event.key == pygame.K_p:
+                        pause = True
+                        paused()
                 
         # variabeln 2 :
         P1_x += P1_x_change
@@ -275,9 +291,10 @@ def game_loop():
             # Sie müssen also die selbe Einrückung haben wie das for.
             # Allerdings nicht wie das if, da sie sonst für jedes event wiederholt würden.
         gameDisplay.fill(white)
-        player(P1_x,P1_y,P2_x,P2_y)
+        player_1(P1_x,P1_y,P2_x,P2_y)
+        if player_P2 == True:
+            player_2()
         Score(score)
-
         #things(thin_x, thing_y, thing_h, thing_w, color)
         things(thing_start_x, thing_start_y, thing_height, thing_width, black)
         thing_start_y += thing_speed
@@ -287,16 +304,17 @@ def game_loop():
         thing_3_start_y += thing_3_speed
         things_4(thing_4_start_x, thing_4_start_y, thing_4_height, thing_4_width, grey)
         thing_4_start_x -= thing_4_speed
-        #Player 1:
+        #player_1 1:
         if P1_x > display_width - img_width or P1_x < 0:
             crash()
         if P1_y > display_height - img_height or P1_y < 0:
             crash()
         #Player 2:
-        if P2_x > display_width - img_width or P2_x < 0:
-            crash()
-        if P2_y > display_height - img_height or P2_y < 0:
-            crash()
+        if player_P2 == True:
+            if P2_x > display_width - img_width or P2_x < 0:
+                crash()
+            if P2_y > display_height - img_height or P2_y < 0:
+                crash()
 
         if thing_start_y > display_height:
             thing_start_y = 0 - thing_height
@@ -331,18 +349,19 @@ def game_loop():
             if P1_y > thing_4_start_y and P1_y < thing_4_start_y + thing_4_width or P1_y + img_width > thing_4_start_y and P1_y + img_width < thing_4_start_y + thing_4_width:
                 crash()
         #Player 2 Kollisionen:
-        if P2_y <= thing_start_y + thing_height and P2_y >= thing_start_y - thing_height:
-            if P2_x > thing_start_x and P2_x < thing_start_x + thing_width or P2_x + img_width > thing_start_x and P2_x + img_width < thing_start_x + thing_width:
-                crash()
-        if P2_x <= thing_2_start_x + thing_2_height and P2_x >= thing_2_start_x - thing_2_height:
-            if P2_y > thing_2_start_y and P2_y < thing_2_start_y + thing_2_width or P2_y + img_width > thing_2_start_y and P2_y + img_width < thing_2_start_y + thing_2_width:
-                crash()
-        if P2_x <= thing_3_start_x + thing_3_height and P2_x >= thing_3_start_x - thing_3_height:
-            if P2_y > thing_3_start_y and P2_y < thing_3_start_y + thing_3_width or P2_y + img_width > thing_3_start_y and P2_y + img_width < thing_3_start_y + thing_3_width:
-                crash()
-        if P2_x <= thing_4_start_x + thing_4_height and P2_x >= thing_4_start_x - thing_4_height:
-            if P2_y > thing_4_start_y and P2_y < thing_4_start_y + thing_4_width or P2_y + img_width > thing_4_start_y and P2_y + img_width < thing_4_start_y + thing_4_width:
-                crash()
+        if player_P2 == True:        
+            if P2_y <= thing_start_y + thing_height and P2_y >= thing_start_y - thing_height:
+                if P2_x > thing_start_x and P2_x < thing_start_x + thing_width or P2_x + img_width > thing_start_x and P2_x + img_width < thing_start_x + thing_width:
+                    crash()
+            if P2_x <= thing_2_start_x + thing_2_height and P2_x >= thing_2_start_x - thing_2_height:
+                if P2_y > thing_2_start_y and P2_y < thing_2_start_y + thing_2_width or P2_y + img_width > thing_2_start_y and P2_y + img_width < thing_2_start_y + thing_2_width:
+                    crash()
+            if P2_x <= thing_3_start_x + thing_3_height and P2_x >= thing_3_start_x - thing_3_height:
+                if P2_y > thing_3_start_y and P2_y < thing_3_start_y + thing_3_width or P2_y + img_width > thing_3_start_y and P2_y + img_width < thing_3_start_y + thing_3_width:
+                    crash()
+            if P2_x <= thing_4_start_x + thing_4_height and P2_x >= thing_4_start_x - thing_4_height:
+                if P2_y > thing_4_start_y and P2_y < thing_4_start_y + thing_4_width or P2_y + img_width > thing_4_start_y and P2_y + img_width < thing_4_start_y + thing_4_width:
+                    crash()
 
         pygame.display.update()
         clock.tick(60)
@@ -356,3 +375,4 @@ game_intro()
 game_loop()
 pygame.quit()
 quit()
+
