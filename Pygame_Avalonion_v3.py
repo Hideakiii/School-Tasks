@@ -364,7 +364,7 @@ def game_loop():
                 p1_dead = True
                 p1_dead_start = time.time()
                 P1_hide()
-                p1_lives =- 1
+                p1_lives -= 1
                 if p1_lives == 0:
                     crash()
                 else:
@@ -375,7 +375,7 @@ def game_loop():
                 p1_dead = True
                 p1_dead_start = time.time()
                 P1_hide()
-                p1_lives =- 1
+                p1_lives -= 1
                 if p1_lives == 0:
                     crash()
                 else:
