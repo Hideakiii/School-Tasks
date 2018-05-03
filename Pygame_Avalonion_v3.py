@@ -1,3 +1,4 @@
+
 import pygame
 import random
 import time
@@ -9,7 +10,7 @@ display_width = 1200
 display_height = 700
 gameDisplay = pygame.display.set_mode((display_width,display_height))
 P1_Img = pygame.image.load('Pixelart_P1.png')
-P2_Img = pygame.image.load('Pixelart_P2.jpeg')
+P2_Img = pygame.image.load('Pixelart_P2.png')
 img_width = 75
 img_height = 75
 pygame.display.set_icon(P1_Img)
@@ -33,7 +34,6 @@ pause = False
 player_P1 = True
 player_P2 = False
 p1_dead = False
-p1_lives = 3
 
 #crash = True
 
@@ -57,6 +57,11 @@ def Score(count):
     text = font.render("Score: "+ str(count), True ,black)
     gameDisplay.blit(text, (0,0))
     
+def Lives(p1_lives):
+    font = pygame.font.SysFont(None, 25)
+    text = font.render("Player 1 Lives: "+ str(p1_lives), True ,black)
+    gameDisplay.blit(text, (0,20))
+
 def crash():
 
     while True:
@@ -91,7 +96,7 @@ def player_P2_true():
 def player_P2_false():
     global player_P2
     player_P2 = False  
-    
+
 def P1_hide():
     global p1_dead
     global P1_x
@@ -225,6 +230,7 @@ def game_loop():
     P2_y_change = 0
     gameExit = False
     score = 0
+    p1_lives = 3
     
     #thing 1 :
 
@@ -348,6 +354,7 @@ def game_loop():
             player_2(P2_x,P2_y)
 
         Score(score)
+        Lives(p1_lives)
         #things(thin_x, thing_y, thing_h, thing_w, color)
         things(thing_start_x, thing_start_y, thing_height, thing_width, black)
         thing_start_y += thing_speed
@@ -360,17 +367,13 @@ def game_loop():
         #player_1 1:
         if player_P1 == True and p1_dead == False:
             if P1_x > display_width - img_width or P1_x < 0:
-                global p1_lives
                 p1_dead = True
                 p1_dead_start = time.time()
                 P1_hide()
                 p1_lives -= 1
                 if p1_lives == 0:
                     crash()
-                else:
-                    pass
-     
-                #crash()
+
             if P1_y > display_height - img_height or P1_y < 0:
                 p1_dead = True
                 p1_dead_start = time.time()
@@ -378,10 +381,6 @@ def game_loop():
                 p1_lives -= 1
                 if p1_lives == 0:
                     crash()
-                else:
-                    pass
-               
-                #crash()
         #Player 2:
         if player_P2 == True:
             if P2_x > display_width - img_width or P2_x < 0:
@@ -415,25 +414,33 @@ def game_loop():
                     p1_dead = True
                     p1_dead_start = time.time()
                     P1_hide()
-                    #crash()
+                    p1_lives -= 1
+                    if p1_lives == 0:
+                        crash()
             if P1_x <= thing_2_start_x + thing_2_height and P1_x >= thing_2_start_x - thing_2_height:
                 if P1_y > thing_2_start_y and P1_y < thing_2_start_y + thing_2_width or P1_y + img_width > thing_2_start_y and P1_y + img_width < thing_2_start_y + thing_2_width:
                     p1_dead = True
                     p1_dead_start = time.time()
                     P1_hide()
-                    #crash()
+                    p1_lives -= 1
+                    if p1_lives == 0:
+                        crash()
             if P1_x <= thing_3_start_x + thing_3_height and P1_x >= thing_3_start_x - thing_3_height:
                 if P1_y > thing_3_start_y and P1_y < thing_3_start_y + thing_3_width or P1_y + img_width > thing_3_start_y and P1_y + img_width < thing_3_start_y + thing_3_width:
                     p1_dead = True
                     p1_dead_start = time.time()
                     P1_hide()
-                    #crash()
+                    p1_lives -= 1
+                    if p1_lives == 0:
+                        crash()
             if P1_x <= thing_4_start_x + thing_4_height and P1_x >= thing_4_start_x - thing_4_height:
                 if P1_y > thing_4_start_y and P1_y < thing_4_start_y + thing_4_width or P1_y + img_width > thing_4_start_y and P1_y + img_width < thing_4_start_y + thing_4_width:
                     p1_dead = True
                     p1_dead_start = time.time()
                     P1_hide()
-                #crash()
+                    p1_lives -= 1
+                    if p1_lives == 0:
+                        crash()
         #Player 2 Kollisionen:
         if player_P2 == True:        
             if P2_y <= thing_start_y + thing_height and P2_y >= thing_start_y - thing_height:
