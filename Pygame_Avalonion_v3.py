@@ -1,4 +1,3 @@
-
 import pygame
 import random
 import time
@@ -30,10 +29,12 @@ light_brown = (110,95,100)
 # Punkt Komma Groß
 clock = pygame.time.Clock()
 p1_dead_start = 0
+p1_dead_start = time.time()
 pause = False
 player_P1 = True
 player_P2 = False
 p1_dead = False
+p2_dead = False
 
 #crash = True
 
@@ -58,11 +59,14 @@ def Score(count):
     text = font.render("Score: "+ str(count), True ,black)
     gameDisplay.blit(text, (0,0))
     
-def Lives(p1_lives):
+def Lives(p1_lives, p2_lives):
     font = pygame.font.SysFont(None, 25)
     text = font.render("Player 1 Lives: "+ str(p1_lives), True ,black)
     gameDisplay.blit(text, (0,20))
+    text = font.render("Player 2 Lives: "+ str(p2_lives), True ,black)
+    gameDisplay.blit(text, (0,40))
     pygame.display.update()
+    
 
 def crash():
 
@@ -115,8 +119,25 @@ def P1_unhide():
     global display_width
     P1_x = display_width * 0.5
     P1_y = display_height * 0.8
-    pygame.display.update()
+    pygame.display.update() 
     
+def   P2_hide():
+	global p2_dead
+	global P2_x
+	global P2_y
+	p2_dead = True
+	P2_x = -30000
+	P2_y = 20000
+	pygame.display.update()
+
+def P2_unhide():
+    global P2_x
+    global P2_y
+    global display_height
+    global display_width
+    P2_x = display_width * 0.5
+    P2_y = display_height * 0.8
+    pygame.display.update() 
 
     
 def things(thing_x, thing_y, thing_h, thing_w, color):
@@ -207,9 +228,14 @@ def game_loop():
     global player_P1
     global p1_dead
     global p1_dead_start
+    global p1_dead
+    global p2_dead_dtart
     global P1_x
     global P1_y
+    global P2_x
+    global P2_y
     global p1_lives
+    global p2_lives
     #variabeln_2:
     black = (0,0,0)
     white = (255,255,255)
@@ -233,6 +259,7 @@ def game_loop():
     gameExit = False
     score = 0
     p1_lives = 3
+    p2_lives = 3
     
     #thing 1 :
 
@@ -282,7 +309,14 @@ def game_loop():
                 P1_unhide()
             if p1_dead_diff < 6000:
                 p1_dead = False
-                
+        if p2_dead == True:
+        	p2_dead_end = time.time()
+        	p2_dead_diff = p2_dead_end - p2_dead_start
+        	if p2_dead_diff < 3000:
+        		P2_unhide()
+            if p2_dead_diff < 6000:
+            	p1_dead = False
+            	
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -356,7 +390,7 @@ def game_loop():
             player_2(P2_x,P2_y)
 
         Score(score)
-        Lives(p1_lives)
+        Lives(p1_lives, p2_lives)
         #things(thin_x, thing_y, thing_h, thing_w, color)
         things(thing_start_x, thing_start_y, thing_height, thing_width, black)
         thing_start_y += thing_speed
@@ -386,9 +420,19 @@ def game_loop():
         #Player 2:
         if player_P2 == True:
             if P2_x > display_width - img_width or P2_x < 0:
-                crash()
+                p2_dead = True
+                p2_dead_start = time.time()
+                P2_hide()
+                p2_lives -= 1
+                if p2_lives == 0:
+                    crash()
             if P2_y > display_height - img_height or P2_y < 0:
-                crash()
+                p2_dead = True
+                p2_dead_start = time.time()
+                P2_hide()
+                p2_lives -= 1
+                if p2_lives == 0:
+                    crash()
 
         if thing_start_y > display_height:
             thing_start_y = 0 - thing_height
@@ -447,16 +491,36 @@ def game_loop():
         if player_P2 == True:        
             if P2_y <= thing_start_y + thing_height and P2_y >= thing_start_y - thing_height:
                 if P2_x > thing_start_x and P2_x < thing_start_x + thing_width or P2_x + img_width > thing_start_x and P2_x + img_width < thing_start_x + thing_width:
-                    crash()
+					p2_dead = True
+                	p2_dead_start = time.time()
+                	P2_hide()
+                	p2_lives -= 1
+                	if p2_lives == 0:
+                    	crash()
             if P2_x <= thing_2_start_x + thing_2_height and P2_x >= thing_2_start_x - thing_2_height:
                 if P2_y > thing_2_start_y and P2_y < thing_2_start_y + thing_2_width or P2_y + img_width > thing_2_start_y and P2_y + img_width < thing_2_start_y + thing_2_width:
-                    crash()
+					p2_dead = True
+                	p2_dead_start = time.time()
+                	P2_hide()
+                	p2_lives -= 1
+                	if p2_lives == 0:
+                    	crash()
             if P2_x <= thing_3_start_x + thing_3_height and P2_x >= thing_3_start_x - thing_3_height:
                 if P2_y > thing_3_start_y and P2_y < thing_3_start_y + thing_3_width or P2_y + img_width > thing_3_start_y and P2_y + img_width < thing_3_start_y + thing_3_width:
-                    crash()
+					p2_dead = True
+                	p2_dead_start = time.time()
+                	P2_hide()
+                	p2_lives -= 1
+                	if p2_lives == 0:
+                    	crash()
             if P2_x <= thing_4_start_x + thing_4_height and P2_x >= thing_4_start_x - thing_4_height:
                 if P2_y > thing_4_start_y and P2_y < thing_4_start_y + thing_4_width or P2_y + img_width > thing_4_start_y and P2_y + img_width < thing_4_start_y + thing_4_width:
-                    crash()
+					p2_dead = True
+                	p2_dead_start = time.time()
+                	P2_hide()
+                	p2_lives -= 1
+                	if p2_lives == 0:
+                    	crash()
 
         pygame.display.update()
         clock.tick(60)
@@ -470,4 +534,3 @@ game_intro()
 game_loop()
 pygame.quit()
 quit()
-
