@@ -43,7 +43,8 @@ def text_objects(text, font):
     textSurface = font.render(text, True, black)
     return textSurface, textSurface.get_rect()
 
-def message_display(text):
+def message_
+display(text):
     largeText = pygame.font.Font("freesansbold.ttf",115)
     TextSurf, TextRect = text_objects(text, largeText)
     TextRect.center = ((display_width/2),(display_height/2))
@@ -61,6 +62,7 @@ def Lives(p1_lives):
     font = pygame.font.SysFont(None, 25)
     text = font.render("Player 1 Lives: "+ str(p1_lives), True ,black)
     gameDisplay.blit(text, (0,20))
+    pygame.display.update()
 
 def crash():
 
