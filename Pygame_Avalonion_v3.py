@@ -29,7 +29,7 @@ light_brown = (110,95,100)
 # Punkt Komma Groß
 clock = pygame.time.Clock()
 p1_dead_start = 0
-p1_dead_start = time.time()
+p1_dead_start = 0
 pause = False
 player_P1 = True
 player_P2 = False
@@ -44,8 +44,7 @@ def text_objects(text, font):
     textSurface = font.render(text, True, black)
     return textSurface, textSurface.get_rect()
 
-def message_
-display(text):
+def message_display(text):
     largeText = pygame.font.Font("freesansbold.ttf",115)
     TextSurf, TextRect = text_objects(text, largeText)
     TextRect.center = ((display_width/2),(display_height/2))
@@ -65,9 +64,7 @@ def Lives(p1_lives, p2_lives):
     gameDisplay.blit(text, (0,20))
     text = font.render("Player 2 Lives: "+ str(p2_lives), True ,black)
     gameDisplay.blit(text, (0,40))
-    pygame.display.update()
     
-
 def crash():
 
     while True:
@@ -227,9 +224,9 @@ def game_loop():
     global player_P2
     global player_P1
     global p1_dead
+    global p2_dead
     global p1_dead_start
-    global p1_dead
-    global p2_dead_dtart
+    global p2_dead_start
     global P1_x
     global P1_y
     global P2_x
@@ -310,13 +307,13 @@ def game_loop():
             if p1_dead_diff < 6000:
                 p1_dead = False
         if p2_dead == True:
-        	p2_dead_end = time.time()
-        	p2_dead_diff = p2_dead_end - p2_dead_start
-        	if p2_dead_diff < 3000:
-        		P2_unhide()
+            p2_dead_end = time.time()
+            p2_dead_diff = p2_dead_end - p2_dead_start
+            if p2_dead_diff < 30000:
+                P2_unhide()
             if p2_dead_diff < 6000:
-            	p1_dead = False
-            	
+                p2_dead = False
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -491,35 +488,35 @@ def game_loop():
         if player_P2 == True:        
             if P2_y <= thing_start_y + thing_height and P2_y >= thing_start_y - thing_height:
                 if P2_x > thing_start_x and P2_x < thing_start_x + thing_width or P2_x + img_width > thing_start_x and P2_x + img_width < thing_start_x + thing_width:
-					p2_dead = True
-                	p2_dead_start = time.time()
-                	P2_hide()
-                	p2_lives -= 1
-                	if p2_lives == 0:
-                    	crash()
+                    p2_dead = True
+                    p2_dead_start = time.time()
+                    P2_hide()
+                    p2_lives -= 1
+                    if p2_lives == 0:
+                        crash()
             if P2_x <= thing_2_start_x + thing_2_height and P2_x >= thing_2_start_x - thing_2_height:
                 if P2_y > thing_2_start_y and P2_y < thing_2_start_y + thing_2_width or P2_y + img_width > thing_2_start_y and P2_y + img_width < thing_2_start_y + thing_2_width:
-					p2_dead = True
-                	p2_dead_start = time.time()
-                	P2_hide()
-                	p2_lives -= 1
-                	if p2_lives == 0:
-                    	crash()
+                    p2_dead = True
+                    p2_dead_start = time.time()
+                    P2_hide()
+                    p2_lives -= 1
+                    if p2_lives == 0:
+                        crash()
             if P2_x <= thing_3_start_x + thing_3_height and P2_x >= thing_3_start_x - thing_3_height:
                 if P2_y > thing_3_start_y and P2_y < thing_3_start_y + thing_3_width or P2_y + img_width > thing_3_start_y and P2_y + img_width < thing_3_start_y + thing_3_width:
-					p2_dead = True
-                	p2_dead_start = time.time()
-                	P2_hide()
-                	p2_lives -= 1
-                	if p2_lives == 0:
-                    	crash()
+                    p2_dead = True
+                    p2_dead_start = time.time()
+                    P2_hide()
+                    p2_lives -= 1
+                    if p2_lives == 0:
+                        crash()
             if P2_x <= thing_4_start_x + thing_4_height and P2_x >= thing_4_start_x - thing_4_height:
                 if P2_y > thing_4_start_y and P2_y < thing_4_start_y + thing_4_width or P2_y + img_width > thing_4_start_y and P2_y + img_width < thing_4_start_y + thing_4_width:
-					p2_dead = True
-                	p2_dead_start = time.time()
-                	P2_hide()
-                	p2_lives -= 1
-                	if p2_lives == 0:
+                    p2_dead = True
+                    p2_dead_start = time.time()
+                    P2_hide()
+                    p2_lives -= 1
+                    if p2_lives == 0:
                     	crash()
 
         pygame.display.update()
