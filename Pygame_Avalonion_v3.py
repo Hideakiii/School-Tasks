@@ -115,7 +115,7 @@ def P1_hide():
     pygame.display.update()
     
 def P1_unhide():
-    global p1_dead_change
+
     global P1_x
     global P1_y
     global display_height
@@ -132,7 +132,7 @@ def   P2_hide():
 	pygame.display.update()
 
 def P2_unhide():
-    global p2_dead_change
+
     global P2_x
     global P2_y
     global display_height
@@ -327,7 +327,7 @@ def game_loop():
                 p2_dead_change = False
 
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT or not player_P1 and not player_P2:
                 pygame.quit()
                 quit()
             #player_1 1 controls:
