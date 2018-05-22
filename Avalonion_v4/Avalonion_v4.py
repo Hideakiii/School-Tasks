@@ -21,9 +21,27 @@ grey = (65,65,65)
 light_grey = (80,80,80)
 dark_brown = (90,75,80)
 light_brown = (110,95,100)
+player_P2 = False
+pause = False
+p1_dead_start = 0
+p1_dead_start = 0
+p1_dead_change = False
+p2_dead_change = False
+
+
+def player_P2_true():
+    global player_P2
+    player_P2 = True
+def player_P2_false():
+    global player_P2
+    player_P2_false
+def unpause():
+    global pause
+    pause = False
+
 # Klassen:
 class Player:
-    def __init__(self, Img, dead, exists, died_at_time, lives, score, pos_x, pos_y):
+    def __init__(self, Img, dead, exists, died_at_time, lives, score, pos_x, pos_y, x_change, y_change):
         self.Img = 0
         self.dead = False
         self.exists = True
@@ -32,14 +50,17 @@ class Player:
         self.score = 0
         self.pos_x = 0
         self.pos_y = 0
+        self.x_change = 0
+        self.y_change = 0
 
 class Objekts:
-    def __init__(self,objekt_x, objekt_y, objekt_h, objekt_w):
+    def __init__(self,objekt_x, objekt_y, objekt_h, objekt_w, speed):
         self.objekt_x = 0
         self.objekt_y = 0
         self.objekt_h = 0 
         self.objekt_w = 0
-        pygame.draw.rect(gameDisplay,color,[objekt_x,objekt_y,objekt_h,objekt_w])
+        self.speed = 0
+        self.pygame.draw.rect(gameDisplay,color,[objekt_x,objekt_y,objekt_h,objekt_w])
 
 class Score:
     def __init__(self,count):
@@ -56,15 +77,15 @@ class Lives:
 
 class resurrection:
     def __init__(self,pos_x,pos_y):
-        def Hide():
+        def Hide(self):
             self.pos_x = -30000
             self.pos_y = 20000
-            pygame.display.update()
+            self.pygame.display.update()
 
-        def Unhide():
+        def Unhide(self):
             self.pos_x = display_width * 0.45
             self.pos_y = display_height * 0.8
-            pygame.display,update()
+            self.pygame.display,update()
 
 def quitgame():
     pygame.quit()
@@ -137,12 +158,22 @@ def crash():
         pygame.display.update()
         clock.tick(15)
 
+def quitgame():
+    pygame.quit()
+    quit()
+
 def Game_Loop():
+    global pause
+    gameExit = False
+    global p1_dead_change
+    global p2_dead_change
+    global p1_dead_start
+    global p2_dead_start
 
     clock = pygame.time.Clock()
 
-    p1 = Player(pygame.image.load('Pixelart_P1.png'),False,True,None,3,0,display_width * 0.4,display_height * 0.8)
-    p2 = Player(pygame.image.load('Pixelart_P2.png'),False,False,None,3,0,display_width * 0.5,display_height * 0.8)
+    p1 = Player(pygame.image.load('Pixelart_P1.png'),False,True,None,3,0,display_width * 0.4,display_height * 0.8 ,0,0)
+    p2 = Player(pygame.image.load('Pixelart_P2.png'),False,False,None,3,0,display_width * 0.5,display_height * 0.8 ,0,0)
 
     score1 = Score(count)
     score2 = Score(count)
@@ -150,13 +181,37 @@ def Game_Loop():
     P1_lives = Lives("Player 1 Lives: ", 3,(0,20))
     P2_lives = Lives("Player 2 Lives: ", 3,(0,40))
 
-    object1 = Objekts(random.randint(0,1200),0,75,75)
-    object2 = Objekts(random.randint(0,1200),0,50,50)
-    object3 = Objekts(0,(random.randint(0,700)),75,75)
-    object4 = Objekts(0,(random.randint(0,-700)),100,100)
+    object1 = Objekts(random.randrange(0,display_width),-700,75,75, 5)
+    object2 = Objekts(random.randrange(0,display_width),-700,45,45, 5)
+    object3 = Objekts(-1300,(random.randrange(0,display_height)),75,75, 5)
+    object4 = Objekts(1300,(random.randrange(0,display_height)),100,100, 3)
 
     pygame.init()
     pygame.display.set_caption("Avalonion")
 
+    if player_P2:
+        p2.exists = True
+
     while not gameExit:
-###### ........
+        if p1.dead == True:
+            p1_dead_end = time.time()
+            p1_dead_diff = p1_dead_end - p1_dead_start
+            if not p1_dead_change:
+                if p1_dead_diff > 2:
+                    resurrection.Hide()
+                    p1_dead_change = True
+            if p1_dead_diff > 5:
+                p1_dead = False
+                p1_dead_change = False
+        if p2.dead == True:
+            p2_dead_end = time.time()
+            p2_dead_diff = p2_dead_end - p2_dead_start
+            if not p2_dead_change:
+                if p2_dead_diff > 2:
+                    P2_unhide()
+                    p2_dead_change = True
+            if p2_dead_diff > 5:
+                p2_dead = False
+                p2_dead_change = False
+
+
