@@ -199,9 +199,10 @@ def Game_Loop():
         p2.exists = True
     if not player_P2:
         p2.exists = False
+    p1.exists = True
 
     while not gameExit:
-        if p1.dead == True:
+        if p1.dead == True:  ## Kürzen : if p1.dead:
             p1_dead_end = time.time()
             p1_dead_diff = p1_dead_end - p1_dead_start
             if not p1_dead_change:
@@ -211,7 +212,7 @@ def Game_Loop():
             if p1_dead_diff > 5:
                 p1_dead = False
                 p1_dead_change = False
-        if p2.dead == True:
+        if p2.dead == True:  ## Kürzen : if p2.dead:
             p2_dead_end = time.time()
             p2_dead_diff = p2_dead_end - p2_dead_start
             if not p2_dead_change:
@@ -222,3 +223,115 @@ def Game_Loop():
                 p2_dead = False
                 p2_dead_change = False
 
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            #player_1 1 controls:
+            
+            if p1.exists:
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_LEFT:
+                        p1.x_change = -6.5
+                    elif event.key == pygame.K_RIGHT:
+                        p1.x_change = 6.5
+
+                if event.type == pygame.KEYUP:
+                    if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+                        p1.x_change = 0
+
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_UP:
+                        p1.y_change = -6.5
+                    elif event.key == pygame.K_DOWN:
+                        p1.y_change = 6.5
+
+                if event.type == pygame.KEYUP:
+                    if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
+                        p1.y_change = 0
+
+                    if event.key == pygame.K_p:
+                        pause = True
+                        paused()
+            #Player 2 controls:
+            if p2.exists:
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_a:
+                       p2.x_change = -6.5
+                    elif event.key == pygame.K_d:
+                        p2.x_change = 6.5
+
+                if event.type == pygame.KEYUP:
+                    if event.key == pygame.K_a or event.key == pygame.K_d:
+                        p2.x_change = 0
+
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_w:
+                        p2.y_change = -6.5
+                    elif event.key == pygame.K_s:
+                        p2.y_change = 6.5
+
+                if event.type == pygame.KEYUP:
+                    if event.key == pygame.K_w or event.key == pygame.K_s:
+                        p2.y_change = 0
+
+                    if event.key == pygame.K_p:
+                        pause = True
+                        paused()
+                
+        # variabeln Player:
+        p1.pos_x += p1.x_change
+        p1.pos_y += p1.y_change
+
+        p2.pos_x += p2.x_change
+        p2.pos_y += p2.y_change
+
+        gameDisplay.fill(white)
+
+        score1
+        score2
+
+        P1_lives
+        P2_lives
+
+        object1
+        object1.objekt_y += object1.speed
+        object2
+        object2.objekt_x += object2.speed
+        object3
+        object3.objekt_y += object3.speed
+        object4
+        object4.objekt_x -= object4.speed
+
+        if p1.exists and not p1.dead:
+            if p1.pos_x > display_width - img_width or p1.pos_x < 0:
+                p1.dead = True
+                p1_dead_start = time.time()
+                re_p1.Hide()    ########## Wichtig: P1_Hide wird hier ausgeführt und startet damit die dead loop!
+                p1.lives -= 1
+                if p1.lives == 0:
+                    crash()
+
+            if p1.pos_y > display_height - img_height or p1.pos_y < 0:
+                p1.dead = True
+                p1_dead_start = time.time()
+                re_p1.Hide()
+                p1.lives -= 1
+                if p1.lives == 0:
+                    crash()
+        #Player 2:
+        if p2.exists and not p2.dead:
+            if p2.pos_x > display_width - img_width or p2.pos_x < 0:
+                p2.dead = True
+                p2_dead_start = time.time()
+                re_p2.Hide()
+                p2.lives -= 1
+                if p2.lives == 0:
+                    crash()
+            if p2.pos_y > display_height - img_height or p2.pos_y < 0:
+                p2.dead = True
+                p2_dead_start = time.time()
+                re_p2.Hide()
+                p2.lives -= 1
+                if p2.lives == 0:
+                    crash()
