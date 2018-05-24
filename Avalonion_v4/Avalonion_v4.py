@@ -335,3 +335,51 @@ def Game_Loop():
                 p2.lives -= 1
                 if p2.lives == 0:
                     crash()
+
+        if object1.objekt_y > display_height:
+            ### objekt1_y vielleicht ändern auf objekt1_y_start (andere variabel erstellen!!)
+            object1.objekt_y = 0 - thing_height
+            object1.objekt_x = random.randrange(0, display_width)
+            score1 += 1
+            score2 += 1
+
+        if object2.objekt_x > display_width:
+            object2.objekt_x = 0 - thing_2_width
+            object2.objekt_y = random.randrange(0, display_height)
+            score1 += 1
+            score2 += 1
+
+        if object3.objekt_y > display_height:
+            object3.objekt_y = 0 - thing_3_width
+            object3.objekt_x = random.randrange(0, display_height)
+            score1 += 1
+            score2 += 1
+
+        if object4.objekt_x < 0 - thing_4_width:
+            object4.objekt_x = display_width + thing_4_width
+            object4.objekt_y = random.randrange(0, display_height)
+            score1 += 1
+            score2 += 1
+
+
+
+
+        ######################################################
+
+
+
+
+
+        pygame.display.update()
+        clock.tick(60)
+        object1.speed += 0.001
+        object2.speed += 0.002
+        object3.speed += 0.001
+        object4.speed += 0.001
+
+
+
+game_intro()
+game_loop()
+pygame.quit()
+quit()
