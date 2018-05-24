@@ -77,12 +77,15 @@ class Lives:
 
 class resurrection:
     def __init__(self,pos_x,pos_y):
-        def Hide(self):
+        self.dead = 0
+        self.pos_x
+        self.pos_y
+    def Hide(self):
             self.pos_x = -30000
             self.pos_y = 20000
             self.pygame.display.update()
 
-        def Unhide(self):
+    def Unhide(self):
             self.pos_x = display_width * 0.45
             self.pos_y = display_height * 0.8
             self.pygame.display,update()
@@ -175,6 +178,9 @@ def Game_Loop():
     p1 = Player(pygame.image.load('Pixelart_P1.png'),False,True,None,3,0,display_width * 0.4,display_height * 0.8 ,0,0)
     p2 = Player(pygame.image.load('Pixelart_P2.png'),False,False,None,3,0,display_width * 0.5,display_height * 0.8 ,0,0)
 
+    re_p1 = resurrection(0, 0)
+    re_p2 = resurrection(0, 0)
+
     score1 = Score(count)
     score2 = Score(count)
 
@@ -191,6 +197,8 @@ def Game_Loop():
 
     if player_P2:
         p2.exists = True
+    if not player_P2:
+        p2.exists = False
 
     while not gameExit:
         if p1.dead == True:
@@ -198,7 +206,7 @@ def Game_Loop():
             p1_dead_diff = p1_dead_end - p1_dead_start
             if not p1_dead_change:
                 if p1_dead_diff > 2:
-                    resurrection.Hide()
+                    re_p1.Unhide()  ## re_p1 = resurrection
                     p1_dead_change = True
             if p1_dead_diff > 5:
                 p1_dead = False
@@ -208,10 +216,9 @@ def Game_Loop():
             p2_dead_diff = p2_dead_end - p2_dead_start
             if not p2_dead_change:
                 if p2_dead_diff > 2:
-                    P2_unhide()
+                    re_p2.Unhide()  ## re_p2 = resurrection
                     p2_dead_change = True
             if p2_dead_diff > 5:
                 p2_dead = False
                 p2_dead_change = False
-
 
