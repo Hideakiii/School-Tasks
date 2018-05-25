@@ -28,17 +28,6 @@ p1_dead_start = 0
 p1_dead_change = False
 p2_dead_change = False
 
-
-def player_P2_true():
-    global player_P2
-    player_P2 = True
-def player_P2_false():
-    global player_P2
-    player_P2_false
-def unpause():
-    global pause
-    pause = False
-
 # Klassen:
 class Player:
     def __init__(self, Img, dead, exists, died_at_time, lives, score, pos_x, pos_y, x_change, y_change):
@@ -60,7 +49,7 @@ class Objekts:
         self.objekt_h = 0 
         self.objekt_w = 0
         self.speed = 0
-        self.pygame.draw.rect(gameDisplay,color,[objekt_x,objekt_y,objekt_h,objekt_w])
+        self.pygame.draw.rect(game_Display,color,[objekt_x,objekt_y,objekt_h,objekt_w])
 
 class Score:
     def __init__(self,count):
@@ -78,17 +67,16 @@ class Lives:
 class resurrection:
     def __init__(self,pos_x,pos_y):
         self.dead = 0
-        self.pos_x
-        self.pos_y
-    def Hide(self):
-            self.pos_x = -30000
-            self.pos_y = 20000
-            self.pygame.display.update()
+        pass
+    def Hide(self,pos_x,pos_y):
+        self.pos_x = -30000
+        self.pos_y = 20000
+        self.pygame.display.update()
 
-    def Unhide(self):
-            self.pos_x = display_width * 0.45
-            self.pos_y = display_height * 0.8
-            self.pygame.display,update()
+    def Unhide(self,pos_x,pos_y):
+        self.pos_x = display_width * 0.45
+        self.pos_y = display_height * 0.8
+        self.pygame.display,update()
 
 def quitgame():
     pygame.quit()
@@ -102,25 +90,34 @@ def message_display(text):
     largeText = pygame.font.Font("freesansbold.ttf",115)
     TextSurf, TextRect = text_objects(text, largeText)
     TextRect.center = ((display_width/2),(display_height/2))
-    gameDisplay.blit(TextSurf, TextRect)
+    game_Display.blit(TextSurf, TextRect)
     pygame.display.update()
     time.sleep(2)
-    game_loop()
+    Game_Loop()
 
 def button(msg,x,y,w,h,ic,ac,action=None):
     mouse = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
     if x + w > mouse[0] > x and y + h > mouse[1] > y:
                                   #ac = active color
-        pygame.draw.rect(gameDisplay, ac, (x,y,w,h))
+        pygame.draw.rect(game_Display, ac, (x,y,w,h))
         if click[0] == 1 and action != None:
             action()
     else:
-        pygame.draw.rect(gameDisplay,ic,(x,y,w,h))
+        pygame.draw.rect(game_Display,ic,(x,y,w,h))
     smallText = pygame.font.Font("freesansbold.ttf", 20)
     textSurf, textRect = text_objects(msg, smallText)
     textRect.center = ((x+(w/2)), (y+(h/2)))
-    gameDisplay.blit(textSurf, textRect)
+    game_Display.blit(textSurf, textRect)
+
+def player_P2_true():
+    player_P2 = True
+def player_P2_false():
+    global player_P2
+    player_P2 = False
+def unpause():
+    global pause
+    pause = False
 
 def paused():
     while pause:
@@ -129,17 +126,38 @@ def paused():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-        #gameDisplay.fill(white)
         largeText = pygame.font.Font("freesansbold.ttf",115)
         TextSurf, TextRect = text_objects("Paused", largeText)
         TextRect.center = ((display_width/2),(display_height/2))
-        gameDisplay.blit(TextSurf, TextRect)
+        game_Display.blit(TextSurf, TextRect)
         #buttons:
         button("Continue",250,550,150,50,green,bright_green,unpause)
         button("Quit",750,550,150,50,red,bright_red,quitgame)
         button("Player 2 Aktive",375,450,175,50,dark_brown,light_brown,player_P2_true)
         button("Player 2 Deactive",600,450,175,50,dark_brown,light_brown,player_P2_false)
 
+        pygame.display.update()
+        clock.tick(15)
+
+def game_intro():
+    pygame.init()
+    intro = True
+    while intro:
+        global player_P2
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+        game_Display.fill(white)
+        largeText = pygame.font.Font("freesansbold.ttf",115)
+        TextSurf, TextRect = text_objects("Avalonion", largeText)
+        TextRect.center = ((display_width/2),(display_height/2))
+        game_Display.blit(TextSurf, TextRect)
+        #buttons:
+        button("Start!",250,550,150,50,green,bright_green,Game_Loop)
+        button("Quit!",750,550,150,50,red,bright_red,quitgame)
+        button("Player 2 Aktive",375,450,175,50,dark_brown,light_brown,player_P2_true)
+        button("Player 2 Deactive",600,450,175,50,dark_brown,light_brown,player_P2_false)
         pygame.display.update()
         clock.tick(15)
 
@@ -153,9 +171,9 @@ def crash():
         largeText = pygame.font.Font("freesansbold.ttf",115)
         TextSurf, TextRect = text_objects("You Crashed!", largeText)
         TextRect.center = ((display_width/2),(display_height/2))
-        gameDisplay.blit(TextSurf, TextRect)
+        game_Display.blit(TextSurf, TextRect)
         #buttons:
-        button("Play Again",250,550,150,50,green,bright_green,game_loop)
+        button("Play Again",250,550,150,50,green,bright_green,Game_Loop)
         button("Quit",750,550,150,50,red,bright_red,quitgame)
 
         pygame.display.update()
@@ -286,7 +304,7 @@ def Game_Loop():
         p2.pos_x += p2.x_change
         p2.pos_y += p2.y_change
 
-        gameDisplay.fill(white)
+        game_Display.fill(white)
 
         score1
         score2
@@ -380,6 +398,6 @@ def Game_Loop():
 
 
 game_intro()
-game_loop()
+Game_Loop()
 pygame.quit()
 quit()
