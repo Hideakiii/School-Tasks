@@ -51,7 +51,7 @@ class Objekts:
         self.speed = 0
         self.pygame.draw.rect(game_Display,color,[objekt_x,objekt_y,objekt_h,objekt_w])
 
-class Score:
+class Score:                       ########### mit Score und count gab es probleme .....    
     def __init__(self,count):
         self.font = pygame.font.SysFont(None, 25)
         self.text = font.render("Score: "+ str(count), True,black)
@@ -60,7 +60,7 @@ class Score:
 class Lives:
          ### P = Player 1/2 ,lives, l_xy = anzeige Position(x,y)
     def __init__(self,P,P_lives,l_xy):
-        self.font = pygame.font.SysFont(None, 25)
+        self.font = pygame.font.SysFont(None, 25)     #### und mit font gab es probleme .....
         self.text = font.render(str(P)+ str(P_lives),True, black )
         self.game_Display.blit(text, (l_xy))
 
