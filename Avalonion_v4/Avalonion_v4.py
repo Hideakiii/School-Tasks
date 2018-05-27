@@ -43,13 +43,19 @@ class Player:
         self.y_change = 0
 
 class Objekts:
-    def __init__(self,objekt_x, objekt_y, objekt_h, objekt_w, speed):
+    def __init__(self, color, objekt_x, objekt_y, objekt_h, objekt_w, speed):
         self.objekt_x = 0
         self.objekt_y = 0
         self.objekt_h = 0 
         self.objekt_w = 0
         self.speed = 0
-        self.pygame.draw.rect(game_Display,color,[objekt_x,objekt_y,objekt_h,objekt_w])
+        self.color = color
+        pygame.draw.rect(game_Display,
+                         self.color,
+                         [self.objekt_x,
+                          self.objekt_y,
+                          self.objekt_h,
+                          self.objekt_w])
 
 class Score:                       ########### mit Score und count gab es probleme .....    
     def __init__(self,count):
@@ -61,8 +67,8 @@ class Lives:
          ### P = Player 1/2 ,lives, l_xy = anzeige Position(x,y)
     def __init__(self,P,P_lives,l_xy):
         self.font = pygame.font.SysFont(None, 25)     #### und mit font gab es probleme .....
-        self.text = font.render(str(P)+ str(P_lives),True, black )
-        self.game_Display.blit(text, (l_xy))
+        self.text = self.font.render(str(P)+ str(P_lives),True, black )
+        game_Display.blit(self.text, (l_xy))
 
 class resurrection:
     def __init__(self,pos_x,pos_y):
@@ -183,6 +189,8 @@ def quitgame():
     pygame.quit()
     quit()
 
+
+### Diese Funktion wir für jedes Update ausgeführt.
 def Game_Loop():
     global pause
     gameExit = False
@@ -199,16 +207,16 @@ def Game_Loop():
     re_p1 = resurrection(0, 0)
     re_p2 = resurrection(0, 0)
 
-    score1 = Score(count)
-    score2 = Score(count)
+    #score1 = Score(count)
+    #score2 = Score(count)
 
     P1_lives = Lives("Player 1 Lives: ", 3,(0,20))
     P2_lives = Lives("Player 2 Lives: ", 3,(0,40))
 
-    object1 = Objekts(random.randrange(0,display_width),-700,75,75, 5)
-    object2 = Objekts(random.randrange(0,display_width),-700,45,45, 5)
-    object3 = Objekts(-1300,(random.randrange(0,display_height)),75,75, 5)
-    object4 = Objekts(1300,(random.randrange(0,display_height)),100,100, 3)
+    object1 = Objekts((0,0,0), random.randrange(0,display_width),-700,75,75, 5)
+    object2 = Objekts((0,0,0), random.randrange(0,display_width),-700,45,45, 5)
+    object3 = Objekts((0,0,0), -1300,(random.randrange(0,display_height)),75,75, 5)
+    object4 = Objekts((0,0,0), 1300,(random.randrange(0,display_height)),100,100, 3)
 
     pygame.init()
     pygame.display.set_caption("Avalonion")
@@ -306,11 +314,11 @@ def Game_Loop():
 
         game_Display.fill(white)
 
-        score1
-        score2
+        score1 = 0
+        score2 = 0
 
-        P1_lives
-        P2_lives
+        P1_lives = 3
+        P2_lives = 3
 
         object1
         object1.objekt_y += object1.speed
