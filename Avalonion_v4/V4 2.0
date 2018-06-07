@@ -30,7 +30,7 @@ p2_dead_change = False
 
 # Klassen:
 class Player:
-    def __init__(self, Img, dead, exists, died_at_time, lives, score, pos_x, pos_y, x_change, y_change):
+    def __init__(self, Img, dead, exists, died_at_time, lives, score, pos_x, pos_y, x_change, y_change, game):
         self.Img = Img
         self.dead = False
         self.exists = True
@@ -40,13 +40,14 @@ class Player:
         self.score = score
         self.pos_x = pos_x
         self.pos_y = pos_y
+        self.game = game
         self.x_change = x_change
         self.y_change = y_change
 
     def DrawScore(self):
         font = pygame.font.SysFont(None, 25)
         self.text = font.render("Score: "+ str(self.score), True,black)
-        self.game_Display.blit(text, (0,0))
+        self.game.game_Display.blit(text, (0,0))
 
          ### P = Player 1/2 ,lives, l_xy = anzeige Position(x,y)
     def DrawLives(self,P,P_lives,l_xy):
@@ -178,6 +179,17 @@ def crash():
 def quitgame():
     pygame.quit()
     quit()
+    
+class Game:
+    def __Inint():
+        self.players = []
+    def dieall(self):
+        for play in self.players:
+            play.alive = False
+    pass
+
+game = Game()
+game.players = [Player(game=game), Player()]
 
 def Game_Loop():
     global pause
