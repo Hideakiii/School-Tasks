@@ -82,14 +82,21 @@ class Object:
         self.pos[0] += self.speed[0]
         self.pos[1] += self.speed[1]
         self.speed += self.acceleration
-
+        ### spieler 1 und 2 parameter/erstellung
 p1 = Player(pygame.image.load('Pixelart_P1.png'),False,True,None,3,0,display_width * 0.4,display_height * 0.8 ,0,0,game)
 p2 = Player(pygame.image.load('Pixelart_P1.png'),False,False,None,3,0,display_width * 0.5,display_height * 0.8 ,0,0,game)
+        ### Players ist eine sprite gruppe die p1 und p2 enthält
+players = pygame.sprite.Group()
+players.add(p1)
+players.add(p2)
+        ### objects ist eine sprite gruppe die objekt 1-4 enthält
+objects = pygame.sprite.Group()
+objects.add(Object(random.randrange(0,display_width),-700,75,75, 5))
+objects.add(Object(random.randrange(0,display_width),-700,45,45, 4))
+objects.add(Object(-1300,(random.randrange(0,display_height)),75,75, 5))
+objects.add(Object(1300,(random.randrange(0,display_height)),100,100, 3))
+           
 
-objects = [Object(random.randrange(0,display_width),-700,75,75, 5),
-           Object(random.randrange(0,display_width),-700,45,45, 4),
-           Object(-1300,(random.randrange(0,display_height)),75,75, 5),
-           Object(1300,(random.randrange(0,display_height)),100,100, 3)]
 
 
 
