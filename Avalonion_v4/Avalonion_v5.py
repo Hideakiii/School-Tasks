@@ -32,8 +32,9 @@ game = Game
 
 
 
-class Player:
+class Player(pygame.sprite.Sprite):
     def __init__(self, Img, dead, exists, died_at_time, lives, score, pos_x, pos_y, x_change, y_change, game):
+        pygame.sprite.Sprite.__init__(self)
         self.Img = 0
         self.dead = False
         self.dead_change = False
@@ -54,7 +55,7 @@ class Player:
 
       ### P = Player 1/2 ,lives, l_xy = anzeige Position(x,y)
     def DrawLives(self,P,P_lives,l_xy):
-        self.font = pygame.font.SysFont(None, 25)
+        font = pygame.font.SysFont(None, 25)
         self.text = font.render(str(P)+ str(P_lives),True, black )
         self.game_Display.blit(text, (l_xy))
 
@@ -89,6 +90,30 @@ objects = [Object(random.randrange(0,display_width),-700,75,75, 5),
            Object(random.randrange(0,display_width),-700,45,45, 4),
            Object(-1300,(random.randrange(0,display_height)),75,75, 5),
            Object(1300,(random.randrange(0,display_height)),100,100, 3)]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 objects[1].acceleration = 0.002
 for obj in objects:
