@@ -25,6 +25,98 @@ class Game:
         self.dark_brown = (90,75,80)
         self.light_brown = (110,95,100)
         self.font = pygame.font.SysFont(None, 25)
+        
+    def button(msg,x,y,w,h,ic,ac,action=None):
+        self.mouse = pygame.mouse.get_pos()
+        self.click = pygame.mouse.get_pressed()
+        if x + w > self.mouse[0] > x and y + h > self.mouse[1] > y:
+                                      #ac = active color
+            pygame.draw.rect(game_Display, ac, (x,y,w,h))
+            if self.click[0] == 1 and action != None:
+                action()
+        else:
+            pygame.draw.rect(game_Display,ic,(x,y,w,h))
+        smallText = pygame.font.Font("freesansbold.ttf", 20)
+        textSurf, textRect = text_objects(msg, smallText)
+        textRect.center = ((x+(w/2)), (y+(h/2)))
+        game_Display.blit(textSurf, textRect)
+        
+    def text_objects(text, font):
+        textSurface = font.render(text, True, black)
+        return textSurface, textSurface.get_rect()
+
+    def message_display(text):
+        largeText = pygame.font.Font("freesansbold.ttf",115)
+        TextSurf, TextRect = text_objects(text, largeText)
+        TextRect.center = ((display_width/2),(display_height/2))
+        game_Display.blit(TextSurf, TextRect)
+        pygame.display.update()
+        time.sleep(2)
+        Game_Loop()
+        
+    def quitgame():
+        pygame.quit()
+        quit()
+        
+    def paused():
+        while pause:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+            largeText = pygame.font.Font("freesansbold.ttf",115)
+            TextSurf, TextRect = text_objects("Paused", largeText)
+            TextRect.center = ((display_width/2),(display_height/2))
+            game_Display.blit(TextSurf, TextRect)
+            #buttons:
+            self.button("Continue",250,550,150,50,green,bright_green,unpause)
+            self.button("Quit",750,550,150,50,red,bright_red,quitgame)
+            self.button("Player 2 Aktive",375,450,175,50,dark_brown,light_brown,player_P2_true)
+            self.button("Player 2 Deactive",600,450,175,50,dark_brown,light_brown,player_P2_false)
+
+            pygame.display.update()
+            clock.tick(15)
+
+    def game_intro():
+        pygame.init()
+        self.intro = True
+        while self.intro:
+            global player_P2
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+            game_Display.fill(white)
+            largeText = pygame.font.Font("freesansbold.ttf",115)
+            TextSurf, TextRect = text_objects("Avalonion", largeText)
+            TextRect.center = ((display_width/2),(display_height/2))
+            game_Display.blit(TextSurf, TextRect)
+            #buttons:
+            self.button("Start!",250,550,150,50,green,bright_green,Game_Loop)
+            self.button("Quit!",750,550,150,50,red,bright_red,quitgame)
+            self.button("Player 2 Aktive",375,450,175,50,dark_brown,light_brown,player_P2_true)
+            self.button("Player 2 Deactive",600,450,175,50,dark_brown,light_brown,player_P2_false)
+            pygame.display.update()
+            clock.tick(15)
+
+    def crash():
+
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+            largeText = pygame.font.Font("freesansbold.ttf",115)
+            TextSurf, TextRect = text_objects("You Crashed!", largeText)
+            TextRect.center = ((display_width/2),(display_height/2))
+            game_Display.blit(TextSurf, TextRect)
+            #buttons:
+            self.button("Play Again",250,550,150,50,green,bright_green,Game_Loop)
+            self.button("Quit",750,550,150,50,red,bright_red,quitgame)
+
+            pygame.display.update()
+            clock.tick(15)
+    
 
 
 ### game wurde erstellt um später auf dinge daraus zu zugreifen
@@ -82,6 +174,9 @@ class Object:
         self.pos[0] += self.speed[0]
         self.pos[1] += self.speed[1]
         self.speed += self.acceleration
+        
+
+    
         ### spieler 1 und 2 parameter/erstellung
 p1 = Player(pygame.image.load('Pixelart_P1.png'),False,True,None,3,0,display_width * 0.4,display_height * 0.8 ,0,0,game)
 p2 = Player(pygame.image.load('Pixelart_P1.png'),False,False,None,3,0,display_width * 0.5,display_height * 0.8 ,0,0,game)
@@ -95,6 +190,10 @@ objects.add(Object(random.randrange(0,display_width),-700,75,75, 5))
 objects.add(Object(random.randrange(0,display_width),-700,45,45, 4))
 objects.add(Object(-1300,(random.randrange(0,display_height)),75,75, 5))
 objects.add(Object(1300,(random.randrange(0,display_height)),100,100, 3))
+
+hit_list = pygame.sprite.spritecollide(players, objects, True)
+
+
            
 
 
