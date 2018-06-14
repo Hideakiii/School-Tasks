@@ -11,7 +11,7 @@ class Game:
     def __init__(self):
         self.display_width = 1200
         self.display_height = 700
-        self.game_Display = pygame.display.set_mode((display_width,display_height))
+        self.game_Display = pygame.display.set_mode((self.display_width,self.display_height))
         self.clock = pygame.time.Clock()
         self.pause = False
         self.black = (0,0,0)
@@ -25,8 +25,11 @@ class Game:
         self.dark_brown = (90,75,80)
         self.light_brown = (110,95,100)
         self.font = pygame.font.SysFont(None, 25)
+        self.largeText = pygame.font.Font("freesansbold.ttf",115)
+        pygame.TextSurf, pygame.TextRect = text_objects("Paused", largeText)
+        pygame.TextRect.center = ((self.display_width/2),(self.display_height/2))
         
-    def button(msg,x,y,w,h,ic,ac,action=None):
+    def button(self,msg,x,y,w,h,ic,ac,action=None):
         self.mouse = pygame.mouse.get_pos()
         self.click = pygame.mouse.get_pressed()
         if x + w > self.mouse[0] > x and y + h > self.mouse[1] > y:
@@ -35,39 +38,36 @@ class Game:
             if self.click[0] == 1 and action != None:
                 action()
         else:
-            pygame.draw.rect(game_Display,ic,(x,y,w,h))
-        smallText = pygame.font.Font("freesansbold.ttf", 20)
-        textSurf, textRect = text_objects(msg, smallText)
-        textRect.center = ((x+(w/2)), (y+(h/2)))
-        game_Display.blit(textSurf, textRect)
+            pygame.draw.rect(self,game_Display,ic,(x,y,w,h))
+            smallText = pygame.font.Font("freesansbold.ttf", 20)
+            pygame.textSurf, pygame.textRect = text_objects(msg, smallText)
+            pygame.textRect.center = ((x+(w/2)), (y+(h/2)))
+            game_Display.blit(pygame.textSurf, pygame.textRect)
         
-    def text_objects(text, font):
-        textSurface = font.render(text, True, black)
+    def text_objects(self,text, font):
+        self.textSurface = font.render(text, True, black)
         return textSurface, textSurface.get_rect()
 
-    def message_display(text):
+    def message_display(self,text):
         largeText = pygame.font.Font("freesansbold.ttf",115)
         TextSurf, TextRect = text_objects(text, largeText)
-        TextRect.center = ((display_width/2),(display_height/2))
+        TextRect.center = (self.display_width/2),(self.display_height/2))
         game_Display.blit(TextSurf, TextRect)
         pygame.display.update()
         time.sleep(2)
         Game_Loop()
         
-    def quitgame():
+    def quitgame(self):
         pygame.quit()
         quit()
         
-    def paused():
+    def paused(self):
         while pause:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     quit()
-            largeText = pygame.font.Font("freesansbold.ttf",115)
-            TextSurf, TextRect = text_objects("Paused", largeText)
-            TextRect.center = ((display_width/2),(display_height/2))
-            game_Display.blit(TextSurf, TextRect)
+            game_Display.blit(self.TextSurf, TextRect)
             #buttons:
             self.button("Continue",250,550,150,50,green,bright_green,unpause)
             self.button("Quit",750,550,150,50,red,bright_red,quitgame)
@@ -77,7 +77,7 @@ class Game:
             pygame.display.update()
             clock.tick(15)
 
-    def game_intro():
+    def game_intro(self):
         pygame.init()
         self.intro = True
         while self.intro:
@@ -99,7 +99,7 @@ class Game:
             pygame.display.update()
             clock.tick(15)
 
-    def crash():
+    def crash(self):
 
         while True:
             for event in pygame.event.get():
