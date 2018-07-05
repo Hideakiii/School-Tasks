@@ -9,10 +9,10 @@ pygame.init()
 
 class Game:
     def __init__(self):
-        self.display_width = 800
-        self.display_height = 600
+        self.display_width = 1200
+        self.display_height = 700
         self.game_Display = pygame.display.set_mode((self.display_width,self.display_height))
-        self.Background = pygame.image.load('Avalonion_Hintergrund.png')
+        self.Background = pygame.image.load('Avalonion_Hintergrund.png').convert()
         self.clock = pygame.time.Clock()
         self.pause = False
         self.black = (0,0,0)
@@ -169,6 +169,8 @@ def Game_start():
 
 
         game.game_Display.fill(game.black)
+        game.game_Display.blit(game.Background,(0,0))    ### hierbei wird das programm immernoch stark verlangsamt
+                                                         ### ---> habe das problem lösen können indem ich hinter das "pygame.image.load('Avalonion_Hintergrund.png')" ein ".convert()" gesetzt habe
 
         for p in players:
             if p.exists and not p.dead:
