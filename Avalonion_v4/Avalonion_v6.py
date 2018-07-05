@@ -12,6 +12,7 @@ class Game:
         self.display_width = 800
         self.display_height = 600
         self.game_Display = pygame.display.set_mode((self.display_width,self.display_height))
+        self.Background = pygame.image.load('Avalonion_Hintergrund.png')
         self.clock = pygame.time.Clock()
         self.pause = False
         self.black = (0,0,0)
@@ -33,10 +34,10 @@ game = Game()
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, Img, dead, exists, died_at_time, lives, score, pos_x, pos_y, x_change, y_change, game):
+    def __init__(self, Img, dead, exists, died_at_time, lives, score, pos_x, pos_y, x_change, y_change,playerid ,game):
         pygame.sprite.Sprite.__init__(self)
         # https://stackoverflow.com/questions/14449320/attributeerror-sprite-object-has-no-attribute-image
-        self.image = pygame.image.load("pixelart-klein.jpg")
+        self.image = pygame.image.load("pixelart-klein.png")
         self.rect = self.image.get_rect()
         print(self.rect)
 
@@ -55,18 +56,32 @@ class Player(pygame.sprite.Sprite):
         self.game = game
         self.x_change = x_change
         self.y_change = y_change
+        self.playerid = playerid
 
-    def P_update(self):
-        speed = [0,-0.2]
+    def P_update(self,playerid):
+                ### jetzt habe ich für beide spieler je ein key-setup
+        self.playerid = playerid
+        if playerid == 1:
+            keys = [pygame.K_UP,
+                        pygame.K_DOWN,
+                        pygame.K_LEFT,
+                        pygame.K_RIGHT]
+        if playerid == 2:
+            keys = [pygame.K_w,
+                        pygame.K_s,
+                        pygame.K_a,
+                        pygame.K_d]
+
+        speed = [0,0]
         keystate = pygame.key.get_pressed()
 
-        if keystate[pygame.K_LEFT]:
+        if keystate[keys[2]]:
             speed[0] = -5
-        if keystate[pygame.K_RIGHT]:
+        if keystate[keys[3]]:
             speed[0] = 5
-        if keystate[pygame.K_UP]:
+        if keystate[keys[0]]:
             speed[1] = -5
-        if keystate[pygame.K_DOWN]:
+        if keystate[keys[1]]:
             speed[1] = 5
 
         # Hier muss eventuell nicht das pos von dem Player verändert werden,
@@ -97,31 +112,37 @@ class Object(pygame.sprite.Sprite):
         self.pos = [objekt_x,objekt_y]
         self.objekt_h = objekt_h
         self.objekt_w = objekt_w
-        self.speed = [0,1]
-        self.acceleration = 0.001
+        self.speed = [0,-1]
+        self.acceleration = [0.0 ,-0.001]
         self.color=color
+        self.image = pygame.image.load("pixelart-klein.png")
+        self.rect = self.image.get_rect()
+        print(self.rect)
         pygame.draw.rect(game.game_Display,self.color,[objekt_x,objekt_y,objekt_h,objekt_w])
 
     def Move(self):
         self.pos[0] += self.speed[0]
         self.pos[1] += self.speed[1]
         self.speed += self.acceleration
+        self.rect[0] = self.pos[0]
+        self.rect[1] = self.pos[1]
 
 
 def Game_start():
                 ### spieler 1 und 2 parameter/erstellung
-    p1 = Player(pygame.image.load('Pixelart_P1.png'),False,True,None,3,0,game.display_width * 0.4,game.display_height * 0.8 ,0,0,game)
-    p2 = Player(pygame.image.load('Pixelart_P1.png'),False,False,None,3,0,game.display_width * 0.5,game.display_height * 0.8 ,0,0,game)
+    p1 = Player(pygame.image.load('Pixelart_P1.png'),False,True,None,3,0,game.display_width * 0.4,game.display_height * 0.8 ,0,0,1, game)
+    p2 = Player(pygame.image.load('Pixelart_P2.png'),False,False,None,3,0,game.display_width * 0.5,game.display_height * 0.8 ,0,0,2, game)
             ### Players ist eine sprite gruppe die p1 und p2 enthält
     players = pygame.sprite.Group()
     players.add(p1)
     players.add(p2)
             ### objects ist eine sprite gruppe die objekt 1-4 enthält
     objects = pygame.sprite.Group()
-    objects.add(Object(random.randrange(0,game.display_width),-700,75,75, 5))
-    objects.add(Object(random.randrange(0,game.display_width),-700,45,45, 4))
-    objects.add(Object(-1300,(random.randrange(0,game.display_height)),75,75, 5))
-    objects.add(Object(1300,(random.randrange(0,game.display_height)),100,100, 3))
+    objects.add(Object(random.randrange(0,game.display_width),-700,75,75, [0 ,-5]))
+    objects.add(Object(random.randrange(0,game.display_width),-700,45,45, [0 ,-4]))
+    objects.add(Object(-1300,(random.randrange(0,game.display_height)),75,75, [5 ,0]))
+    objects.add(Object(1300,(random.randrange(0,game.display_height)),100,100, [3 ,0]))
+
 
     gameExit = False
     while not gameExit:
@@ -139,23 +160,32 @@ def Game_start():
                     p1.dead_change = False
         ### checkt ob der User auf das X gedrückt hat ,wenn ja endet das programm
         for event in pygame.event.get():
-            if event.type == pygame.QUIT or not p1.exists and not p2.exists:
+            if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-            #TODO
-            #if event.key == pygame.K_p:
-            #    pause = True
-            #    paused()
+            if pygame.key.get_pressed == pygame.K_p:
+                pause = True
+                paused()
+
 
         game.game_Display.fill(game.black)
+
         for p in players:
             if p.exists and not p.dead:
-                p.P_update()
+                p.P_update(p.playerid)
                 print(p.rect)
+        for o in objects:
+            o.Move()
+            print(o.rect)
+
         players.update()
+        objects.update()
         players.draw(game.game_Display)
+        objects.draw(game.game_Display)
+
 
         pygame.display.update()
+        game.clock.tick(60)
 
 Game_start()
 pygame.quit()
