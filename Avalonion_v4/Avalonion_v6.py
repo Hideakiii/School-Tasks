@@ -122,11 +122,11 @@ class Object(pygame.sprite.Sprite):
         pygame.draw.rect(game.game_Display,self.color,[objekt_x,objekt_y,objekt_h,objekt_w])
 
     def Move(self):
-        self.pos[0] += self.speed[0]
-        self.pos[1] += self.speed[1]
+        ##self.pos[0] += self.speed[0]
+        ##self.pos[1] += self.speed[1]
         self.speed += self.acceleration
-        self.rect[0] = self.pos[0]
-        self.rect[1] = self.pos[1]
+        self.rect[0] = self.pos[0] += self.speed[0]
+        self.rect[1] = self.pos[1] += self.speed[1]
 
 
 def Game_start():
