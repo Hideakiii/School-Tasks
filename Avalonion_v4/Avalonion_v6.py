@@ -153,12 +153,12 @@ def Game_start():
                 # Vielleicht sowas?
                 p.exists = False
                 players.remove(p)
-                if p1.dead_diff > 2:
-                    players.add(p1)
-                    p1.dead_change = True
-                if p1.dead_diff > 5:
-                    p1.dead = False
-                    p1.dead_change = False
+                if p.dead_diff > 2:
+                    players.add(p)
+                    p.dead_change = True
+                if p.dead_diff > 5:
+                    p.dead = False
+                    p.dead_change = False
         ### checkt ob der User auf das X gedrückt hat ,wenn ja endet das programm
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
