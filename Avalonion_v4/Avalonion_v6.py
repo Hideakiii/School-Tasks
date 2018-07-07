@@ -88,10 +88,11 @@ class Player(pygame.sprite.Sprite):
         # sondern direkt die angabe in rect. Man versucht immer die Daten nur
         # einmal zu haben, um zu vermeiden, dass man einzelne bei aktualisierungen
         # vergisst. z.B: https://www.pygame.org/docs/ref/rect.html#pygame.Rect.move
-        self.pos[0] += speed[0]
-        self.pos[1] += speed[1]
-        self.rect[0] = self.pos[0]
-        self.rect[1] = self.pos[1]
+       ## self.pos[0] += speed[0]
+       ## self.pos[1] += speed[1]
+        ### So in etwa ?
+        self.rect[0] = self.pos[0] += speed[0]
+        self.rect[1] = self.pos[1] += speed[1]
 
     def DrawScore(self):
         font = pygame.font.SysFont(None, 25)
