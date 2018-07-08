@@ -40,7 +40,6 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.image.load("pixelart-klein.png")
         self.rect = self.image.get_rect()
         print(self.rect)
-
         self.dead = False
         self.exists = True
         self.dead_change = False
@@ -71,28 +70,15 @@ class Player(pygame.sprite.Sprite):
                         pygame.K_s,
                         pygame.K_a,
                         pygame.K_d]
-
-        speed = [0,0]
         keystate = pygame.key.get_pressed()
-
         if keystate[keys[2]]:
-            speed[0] = -5
+            self.rect.move_ip(-5,0)
         if keystate[keys[3]]:
-            speed[0] = 5
+            self.rect.move_ip(5,0)
         if keystate[keys[0]]:
-            speed[1] = -5
+            self.rect.move_ip(0,-5)
         if keystate[keys[1]]:
-            speed[1] = 5
-
-        # Hier muss eventuell nicht das pos von dem Player verändert werden,
-        # sondern direkt die angabe in rect. Man versucht immer die Daten nur
-        # einmal zu haben, um zu vermeiden, dass man einzelne bei aktualisierungen
-        # vergisst. z.B: https://www.pygame.org/docs/ref/rect.html#pygame.Rect.move
-       ## self.pos[0] += speed[0]
-       ## self.pos[1] += speed[1]
-        ### So in etwa ?
-        self.rect[0] = self.pos[0] += speed[0]
-        self.rect[1] = self.pos[1] += speed[1]
+            self.rect.move_ip(0,5)
 
     def DrawScore(self):
         font = pygame.font.SysFont(None, 25)
@@ -113,7 +99,7 @@ class Object(pygame.sprite.Sprite):
         self.pos = [objekt_x,objekt_y]
         self.objekt_h = objekt_h
         self.objekt_w = objekt_w
-        self.speed = [0,-1]
+        self.speed = [0,-5]
         self.acceleration = [0.0 ,-0.001]
         self.color=color
         self.image = pygame.image.load("pixelart-klein.png")
@@ -122,11 +108,8 @@ class Object(pygame.sprite.Sprite):
         pygame.draw.rect(game.game_Display,self.color,[objekt_x,objekt_y,objekt_h,objekt_w])
 
     def Move(self):
-        ##self.pos[0] += self.speed[0]
-        ##self.pos[1] += self.speed[1]
         self.speed += self.acceleration
-        self.rect[0] = self.pos[0] += self.speed[0]
-        self.rect[1] = self.pos[1] += self.speed[1]
+        self.rect.move_ip((self.speed[0],self.speed[1]))
 
 
 def Game_start():
@@ -137,9 +120,11 @@ def Game_start():
     players = pygame.sprite.Group()
     players.add(p1)
     players.add(p2)
+    p1.rect.move_ip(p1.pos)
+    p2.rect.move_ip(p2.pos)
             ### objects ist eine sprite gruppe die objekt 1-4 enthält
     objects = pygame.sprite.Group()
-    objects.add(Object(random.randrange(0,game.display_width),-700,75,75, [0 ,-5]))
+    objects.add(Object(random.randrange(0,game.display_width),0,75,75, [0,-5]))
     objects.add(Object(random.randrange(0,game.display_width),-700,45,45, [0 ,-4]))
     objects.add(Object(-1300,(random.randrange(0,game.display_height)),75,75, [5 ,0]))
     objects.add(Object(1300,(random.randrange(0,game.display_height)),100,100, [3 ,0]))
