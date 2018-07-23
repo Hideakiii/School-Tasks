@@ -26,6 +26,7 @@ class Game:
         self.dark_brown = (90,75,80)
         self.light_brown = (110,95,100)
         self.font = pygame.font.SysFont(None, 25)
+        self.FPS = 60
 
 
 ### game wurde erstellt um später auf dinge daraus zu zugreifen
@@ -94,18 +95,16 @@ class Player(pygame.sprite.Sprite):
 # Auch Object soll ein ein Sprite sein
 class Object(pygame.sprite.Sprite):
     #Hinzufügen der Standardfarbe schwarz
-    def __init__(self,objekt_x, objekt_y, objekt_h, objekt_w, speed, color=game.black):
+    def __init__(self,objekt_x, objekt_y, speed, color=game.black,image=pygame.image.load("pixelart-klein.png")):
         pygame.sprite.Sprite.__init__(self)
-        self.pos = [objekt_x,objekt_y]
-        self.objekt_h = objekt_h
-        self.objekt_w = objekt_w
-        self.speed = [0,-5]
-        self.acceleration = [0.0 ,-0.001]
+        self.start_pos = [objekt_x, objekt_y]
+        self.speed = speed
+        self.acceleration = [0 ,-0.001]
         self.color=color
         self.image = pygame.image.load("pixelart-klein.png")
         self.rect = self.image.get_rect()
         print(self.rect)
-        pygame.draw.rect(game.game_Display,self.color,[objekt_x,objekt_y,objekt_h,objekt_w])
+        pygame.draw.rect(game.game_Display,self.color,self.rect)
 
     def Move(self):
         self.speed += self.acceleration
@@ -114,8 +113,8 @@ class Object(pygame.sprite.Sprite):
 
 def Game_start():
                 ### spieler 1 und 2 parameter/erstellung
-    p1 = Player(pygame.image.load('Pixelart_P1.png'),False,True,None,3,0,game.display_width * 0.4,game.display_height * 0.8 ,0,0,1, game)
-    p2 = Player(pygame.image.load('Pixelart_P2.png'),False,False,None,3,0,game.display_width * 0.5,game.display_height * 0.8 ,0,0,2, game)
+    p1 = Player(pygame.image.load('Pixelart_P1.png'),False,True,None,3,0,game.display_width * 0.5,game.display_height * 0.8 ,0,0,1, game)
+    p2 = Player(pygame.image.load('Pixelart_P2.png'),False,False,None,3,0,game.display_width * 0.4,game.display_height * 0.8 ,0,0,2, game)
             ### Players ist eine sprite gruppe die p1 und p2 enthält
     players = pygame.sprite.Group()
     players.add(p1)
@@ -124,10 +123,12 @@ def Game_start():
     p2.rect.move_ip(p2.pos)
             ### objects ist eine sprite gruppe die objekt 1-4 enthält
     objects = pygame.sprite.Group()
-    objects.add(Object(random.randrange(0,game.display_width),0,75,75, [0,-5]))
-    objects.add(Object(random.randrange(0,game.display_width),-700,45,45, [0 ,-4]))
-    objects.add(Object(-1300,(random.randrange(0,game.display_height)),75,75, [5 ,0]))
-    objects.add(Object(1300,(random.randrange(0,game.display_height)),100,100, [3 ,0]))
+    objects.add(Object(random.randrange(0,game.display_width),0, [0,5]))
+    objects.add(Object(random.randrange(0,game.display_width),0, [0 ,-4]))
+    objects.add(Object(0,(random.randrange(0,game.display_height)), [5 ,0]))
+    objects.add(Object(1300,(random.randrange(0,game.display_height)), [-3 ,0]))
+    for object in objects:
+        object.rect.move_ip(object.start_pos[0] ,object.start_pos[1])
 
 
     gameExit = False
@@ -162,10 +163,15 @@ def Game_start():
             if p.exists and not p.dead:
                 p.P_update(p.playerid)
                 print(p.rect)
+
         for o in objects:
             o.Move()
             print(o.rect)
 
+        for object in objects:
+            if object.rect[0] > game.display_width + 50 or object.rect[1] > game.display_height + 50:
+                object.rect.move_ip(object.start_pos[0] ,object.start_pos[1])                               ### Sollte die objekte nach verlassen des Bildschirmes wieder auf ihre 
+                                                                                                            ### Start position zurück setzen ,tuts aber nicht ^_^
         players.update()
         objects.update()
         players.draw(game.game_Display)
@@ -173,7 +179,7 @@ def Game_start():
 
 
         pygame.display.update()
-        game.clock.tick(60)
+        game.clock.tick(game.FPS)
 
 Game_start()
 pygame.quit()
