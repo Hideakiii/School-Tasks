@@ -170,6 +170,8 @@ def Game_start():
 
         for object in objects:
             if object.rect[0] > game.display_width + 50 or object.rect[1] > game.display_height + 50:
+                object.rect[0] = object.start_pos[0]
+                object.rect[1] = object.start_pos[1]
                 object.rect.move_ip(object.start_pos[0] ,object.start_pos[1])                               ### Sollte die objekte nach verlassen des Bildschirmes wieder auf ihre 
                                                                                                             ### Start position zurück setzen ,tuts aber nicht ^_^
         players.update()
