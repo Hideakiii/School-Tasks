@@ -100,11 +100,11 @@ class Object(pygame.sprite.Sprite):
         self.start_pos = [objekt_x, objekt_y]
         self.speed = speed
         self.acceleration = [0 ,-0.001]
-        self.color=color
-        self.image = pygame.image.load("pixelart-klein.png")
+
+        self.image = image
         self.rect = self.image.get_rect()
-        print(self.rect)
-        pygame.draw.rect(game.game_Display,self.color,self.rect)
+
+
 
     def Move(self):
         self.speed += self.acceleration
@@ -162,11 +162,11 @@ def Game_start():
         for p in players:
             if p.exists and not p.dead:
                 p.P_update(p.playerid)
-                print(p.rect)
+
 
         for o in objects:
             o.Move()
-            print(o.rect)
+
 
         for object in objects:
             if object.rect[0] > game.display_width + 50 or object.rect[1] > game.display_height + 50:
