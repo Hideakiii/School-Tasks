@@ -4,7 +4,9 @@ import time
 import os
 
 pygame.init()
-### game class enthält alle wichtigen variabeln
+
+### game class enthält alle wichtigen variabeln des Spieles
+
 class Game:
     def __init__(self):
         self.display_width = 1200
@@ -25,7 +27,7 @@ class Game:
         self.light_brown = (110,95,100)
         self.font = pygame.font.SysFont(None, 25)
         self.FPS = 60
-### game wurde erstellt um später auf dinge daraus zu zugreifen
+
 game = Game()
 
 class Player(pygame.sprite.Sprite):
@@ -45,7 +47,7 @@ class Player(pygame.sprite.Sprite):
         #self.dead_diff = self.dead_end - died_at_time
         self.lives = max(3,lives)
         self.score = score
-        ### Player position x/y
+        ### Player start position x/y
         self.start_pos = [pos_x,pos_y]
         self.game = game
         self.playerid = playerid
@@ -84,7 +86,6 @@ class Player(pygame.sprite.Sprite):
         self.text = font.render(str(P)+ str(P_lives),True, black )
         self.game_Display.blit(text, (l_xy))
 
-# Auch Object soll ein ein Sprite sein
 class Object(pygame.sprite.Sprite):
     #Hinzufügen der Standardfarbe schwarz
     def __init__(self,objekt_x, objekt_y, speed, color=game.black,image=pygame.image.load("pixelart-klein.png")):
@@ -102,6 +103,7 @@ class Object(pygame.sprite.Sprite):
         self.speed += self.acceleration
         self.rect.move_ip((self.speed[0],self.speed[1]))
 
+
 def Game_start():
                 ### spieler 1 und 2 parameter/erstellung
     p1 = Player(pygame.image.load('Pixelart_P1.png'),False,True,None,3,0,game.display_width * 0.5,game.display_height * 0.8 ,1, game)
@@ -114,19 +116,17 @@ def Game_start():
     p2.rect.move_ip(p2.start_pos)
             ### objects ist eine sprite gruppe die objekt 1-4 enthält
     objects = pygame.sprite.Group()
-    objects.add(Object(random.randrange(0,game.display_width),0, [0,5]))
-    objects.add(Object(random.randrange(0,game.display_width),0, [0 ,4]))
-    objects.add(Object(0,(random.randrange(0,game.display_height)), [5 ,0]))
-    objects.add(Object(1300,(random.randrange(0,game.display_height)), [-3 ,0]))
+    objects.add(Object(random.randrange(0,game.display_width),-50, [0,5]))
+    objects.add(Object(random.randrange(0,game.display_width),-50, [0 ,4]))
+    objects.add(Object(-50,(random.randrange(0,game.display_height - 30)), [5 ,0]))
+    objects.add(Object(1300,(random.randrange(0,game.display_height - 30)), [-3 ,0]))
     for object in objects:
         object.rect.move_ip(object.start_pos[0] ,object.start_pos[1])
 
     gameExit = False
     while not gameExit:
-        # Da jetzt die Spieler in einer Liste Sind muss nicht mehr immer alles doppelt geschrieben werden.
         for p in players:
             if p.dead:
-                # Vielleicht sowas?
                 p.exists = False
                 players.remove(p)
                 if p.dead_diff > 2:
@@ -145,8 +145,8 @@ def Game_start():
                 paused()
 
         game.game_Display.fill(game.black)
-        game.game_Display.blit(game.Background,(0,0))    ### hierbei wird das programm immernoch stark verlangsamt
-                                                         ### ---> habe das problem lösen können indem ich hinter das "pygame.image.load('Avalonion_Hintergrund.png')" ein ".convert()" gesetzt habe
+        game.game_Display.blit(game.Background,(0,0))    
+                                                         
         for p in players:
             if p.exists and not p.dead:
                 p.P_update(p.playerid)
@@ -161,11 +161,11 @@ def Game_start():
 
         for object in objects:
             object.Move()
-            if object.rect[0] > game.display_width + 100 or object.rect[0] < -1400 or object.rect[1] > game.display_height or object.rect[1] < game.display_height -800:
+            if object.rect[0] > game.display_width + 100 or object.rect[0] < -100 or object.rect[1] > game.display_height or object.rect[1] < -100: ###    <-----
                 object.rect[0] = object.start_pos[0]
-                object.rect[1] = object.start_pos[1]
+                object.rect[1] = object.start_pos[1]                                                                                                ###    <-----
                 object.rect.move_ip(object.start_pos[0] ,object.start_pos[1])                               ### Sollte die objekte nach verlassen des Bildschirmes wieder auf ihre 
-                                                                                                            ### Start position zurück setzen ,tuts aber nicht ^_^
+                                                                                                            ### Start position zurück setzen ,leider verschwinden manche objecte jetzt einfach ...
         players.update()
         objects.update()
         players.draw(game.game_Display)
