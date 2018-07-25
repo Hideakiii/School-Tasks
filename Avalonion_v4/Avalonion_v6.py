@@ -4,9 +4,7 @@ import time
 import os
 
 pygame.init()
-
 ### game class enthält alle wichtigen variabeln
-
 class Game:
     def __init__(self):
         self.display_width = 1200
@@ -27,12 +25,11 @@ class Game:
         self.light_brown = (110,95,100)
         self.font = pygame.font.SysFont(None, 25)
         self.FPS = 60
-
 ### game wurde erstellt um später auf dinge daraus zu zugreifen
 game = Game()
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, Img, dead, exists, died_at_time, lives, score, pos_x, pos_y, x_change, y_change,playerid ,game):
+    def __init__(self, Img, dead, exists, died_at_time, lives, score, pos_x, pos_y,playerid ,game):
         pygame.sprite.Sprite.__init__(self)
         # https://stackoverflow.com/questions/14449320/attributeerror-sprite-object-has-no-attribute-image
         self.image = pygame.image.load("pixelart-klein.png")
@@ -49,10 +46,8 @@ class Player(pygame.sprite.Sprite):
         self.lives = max(3,lives)
         self.score = score
         ### Player position x/y
-        self.pos = [pos_x,pos_y]
+        self.start_pos = [pos_x,pos_y]
         self.game = game
-        self.x_change = x_change
-        self.y_change = y_change
         self.playerid = playerid
 
     def P_update(self,playerid):
@@ -107,17 +102,16 @@ class Object(pygame.sprite.Sprite):
         self.speed += self.acceleration
         self.rect.move_ip((self.speed[0],self.speed[1]))
 
-
 def Game_start():
                 ### spieler 1 und 2 parameter/erstellung
-    p1 = Player(pygame.image.load('Pixelart_P1.png'),False,True,None,3,0,game.display_width * 0.5,game.display_height * 0.8 ,0,0,1, game)
-    p2 = Player(pygame.image.load('Pixelart_P2.png'),False,False,None,3,0,game.display_width * 0.4,game.display_height * 0.8 ,0,0,2, game)
+    p1 = Player(pygame.image.load('Pixelart_P1.png'),False,True,None,3,0,game.display_width * 0.5,game.display_height * 0.8 ,1, game)
+    p2 = Player(pygame.image.load('Pixelart_P2.png'),False,False,None,3,0,game.display_width * 0.4,game.display_height * 0.8 ,2, game)
             ### Players ist eine sprite gruppe die p1 und p2 enthält
     players = pygame.sprite.Group()
     players.add(p1)
     players.add(p2)
-    p1.rect.move_ip(p1.pos)
-    p2.rect.move_ip(p2.pos)
+    p1.rect.move_ip(p1.start_pos)
+    p2.rect.move_ip(p2.start_pos)
             ### objects ist eine sprite gruppe die objekt 1-4 enthält
     objects = pygame.sprite.Group()
     objects.add(Object(random.randrange(0,game.display_width),0, [0,5]))
