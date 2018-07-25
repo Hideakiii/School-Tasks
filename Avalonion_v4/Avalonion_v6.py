@@ -150,7 +150,7 @@ def Game_start():
         for p in players:
             if p.exists and not p.dead:
                 p.P_update(p.playerid)
-                if p.rect[0] >= game.display_width - 30:
+                if p.rect[0] >= game.display_width - 30:                            ### Eine Border für die spieler am Bildschirmrand
                     p.rect.move_ip(-5,0)
                 elif p.rect[0] <= 0:
                     p.rect.move_ip(5,0)
@@ -161,9 +161,9 @@ def Game_start():
 
         for object in objects:
             object.Move()
-            if object.rect[0] > game.display_width + 100 or object.rect[0] < -100 or object.rect[1] > game.display_height or object.rect[1] < -100: ###    <-----
+            if object.rect[0] > game.display_width + 100 or object.rect[0] < -100 or object.rect[1] > game.display_height:                 ###    <-----
                 object.rect[0] = object.start_pos[0]
-                object.rect[1] = object.start_pos[1]                                                                                                ###    <-----
+                object.rect[1] = object.start_pos[1]                                                                                       ###    <-----
                 object.rect.move_ip(object.start_pos[0] ,object.start_pos[1])                               ### Sollte die objekte nach verlassen des Bildschirmes wieder auf ihre 
                                                                                                             ### Start position zurück setzen ,leider verschwinden manche objecte jetzt einfach ...
         players.update()
