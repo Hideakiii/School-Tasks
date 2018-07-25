@@ -28,11 +28,8 @@ class Game:
         self.font = pygame.font.SysFont(None, 25)
         self.FPS = 60
 
-
 ### game wurde erstellt um später auf dinge daraus zu zugreifen
 game = Game()
-
-
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, Img, dead, exists, died_at_time, lives, score, pos_x, pos_y, x_change, y_change,playerid ,game):
@@ -100,11 +97,11 @@ class Object(pygame.sprite.Sprite):
         self.start_pos = [objekt_x, objekt_y]
         self.speed = speed
         self.acceleration = [0 ,-0.001]
-
-        self.image = image
+        self.color=color
+        self.image = pygame.image.load("pixelart-klein.png")
         self.rect = self.image.get_rect()
-
-
+        print(self.rect)
+        pygame.draw.rect(game.game_Display,self.color,self.rect)
 
     def Move(self):
         self.speed += self.acceleration
@@ -124,12 +121,11 @@ def Game_start():
             ### objects ist eine sprite gruppe die objekt 1-4 enthält
     objects = pygame.sprite.Group()
     objects.add(Object(random.randrange(0,game.display_width),0, [0,5]))
-    objects.add(Object(random.randrange(0,game.display_width),0, [0 ,-4]))
+    objects.add(Object(random.randrange(0,game.display_width),0, [0 ,4]))
     objects.add(Object(0,(random.randrange(0,game.display_height)), [5 ,0]))
     objects.add(Object(1300,(random.randrange(0,game.display_height)), [-3 ,0]))
     for object in objects:
         object.rect.move_ip(object.start_pos[0] ,object.start_pos[1])
-
 
     gameExit = False
     while not gameExit:
@@ -154,22 +150,24 @@ def Game_start():
                 pause = True
                 paused()
 
-
         game.game_Display.fill(game.black)
         game.game_Display.blit(game.Background,(0,0))    ### hierbei wird das programm immernoch stark verlangsamt
                                                          ### ---> habe das problem lösen können indem ich hinter das "pygame.image.load('Avalonion_Hintergrund.png')" ein ".convert()" gesetzt habe
-
         for p in players:
             if p.exists and not p.dead:
                 p.P_update(p.playerid)
-
-
-        for o in objects:
-            o.Move()
-
+                if p.rect[0] >= game.display_width - 30:
+                    p.rect.move_ip(-5,0)
+                elif p.rect[0] <= 0:
+                    p.rect.move_ip(5,0)
+                if p.rect[1] >= game.display_height -30:
+                    p.rect.move_ip(0,-5)
+                if p.rect[1] <= 0:
+                    p.rect.move_ip(0,5)
 
         for object in objects:
-            if object.rect[0] > game.display_width + 50 or object.rect[1] > game.display_height + 50:
+            object.Move()
+            if object.rect[0] > game.display_width + 100 or object.rect[0] < -1400 or object.rect[1] > game.display_height or object.rect[1] < game.display_height -800:
                 object.rect[0] = object.start_pos[0]
                 object.rect[1] = object.start_pos[1]
                 object.rect.move_ip(object.start_pos[0] ,object.start_pos[1])                               ### Sollte die objekte nach verlassen des Bildschirmes wieder auf ihre 
